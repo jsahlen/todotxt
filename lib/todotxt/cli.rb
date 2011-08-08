@@ -76,35 +76,39 @@ module Todotxt
     end
     map "a" => :add
 
-    desc "do | d TODO", "Mark TODO item as done"
-    def do line
-      todo = @list.find_by_line line
-      if todo
-        todo.do
-        puts format_todo(todo)
+    desc "do | d ITEM#[, ITEM#, ITEM#, ...]", "Mark ITEM# as done"
+    def do line1, *lines
+      lines.unshift(line1).each do |line|
+        todo = @list.find_by_line line
+        if todo
+          todo.do
+          puts format_todo(todo)
 
-        @list.save
-      else
-        error "No todo found at line #{line}"
+          @list.save
+        else
+          error "No todo found at line #{line}"
+        end
       end
     end
     map "d" => :do
 
-    desc "undo | u TODO", "Mark TODO item as not done"
-    def undo line
-      todo = @list.find_by_line line
-      if todo
-        todo.undo
-        puts format_todo(todo)
+    desc "undo | u ITEM#[, ITEM#, ITEM#, ...]", "Mark ITEM# item as not done"
+    def undo line1, *lines
+      lines.unshift(line1).each do |line|
+        todo = @list.find_by_line line
+        if todo
+          todo.undo
+          puts format_todo(todo)
 
-        @list.save
-      else
-        error "No todo found at line #{line}"
+          @list.save
+        else
+          error "No todo found at line #{line}"
+        end
       end
     end
     map "u" => :undo
 
-    desc "append | ap TODO STRING", "Append STRING to TODO"
+    desc "append | ap ITEM# STRING", "Append STRING to ITEM#"
     def append line, string
       todo = @list.find_by_line line
       if todo
@@ -118,20 +122,22 @@ module Todotxt
     end
     map "ap" => :append
 
-    desc "remove | rm TODO", "Remove TODO item"
+    desc "remove | rm ITEM#[, ITEM#, ITEM#, ...]", "Remove ITEM#"
     method_option :force, :type => :boolean, :aliases => "-f", :desc => "Don't confirm removal"
-    def remove line
-      todo = @list.find_by_line line
-      if todo
-        say format_todo(todo)
-        if options[:force] || yes?("Remove this item? [y/N]")
-          @list.remove line
-          notice "Removed from list"
+    def remove line1, *lines
+      lines.unshift(line1).each do |line|
+        todo = @list.find_by_line line
+        if todo
+          say format_todo(todo)
+          if options[:force] || yes?("Remove this item? [y/N]")
+            @list.remove line
+            notice "Removed from list"
 
-          @list.save
+            @list.save
+          end
+        else
+          error "No todo found at line #{line}"
         end
-      else
-        error "No todo found at line #{line}"
       end
     end
     map "rm" => :remove
