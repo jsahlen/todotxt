@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Johan Sahlén"]
   s.email       = ["johan@monospace.se"]
   s.homepage    = ""
-  s.summary     = %q{Ruby-based command-line interface for todo.txt}
-  s.description = %q{}
+  s.summary     = %q{todo.txt with a Ruby flair}
+  s.description = %q{Interact with your todo.txt using a Ruby-base command-line tool}
 
   s.rubyforge_project = "todotxt"
 
