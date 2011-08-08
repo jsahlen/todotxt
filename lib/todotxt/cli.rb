@@ -41,12 +41,13 @@ module Todotxt
     end
     map "ls" => :list
 
-    desc "done | lsdone", "List all done items"
-    def done search=""
+    desc "lsdone | lsd", "List all done items"
+    def lsdone search=""
       @list.filter(search, :only_done => true)
 
       render_list
     end
+    map "lsd" => :lsdone
 
     desc "list_projects | lsp", "List all projects"
     def list_projects
@@ -75,7 +76,7 @@ module Todotxt
     end
     map "a" => :add
 
-    desc "do TODO", "Mark TODO item as done"
+    desc "do | d TODO", "Mark TODO item as done"
     method_option :remove, :type => :boolean, :aliases => "--rm", :desc => "Remove from list after marking"
     def do line
       todo = @list.find_by_line line
@@ -92,8 +93,9 @@ module Todotxt
         error "No todo found at line #{line}"
       end
     end
+    map "d" => :do
 
-    desc "undo TODO", "Mark TODO item as not done"
+    desc "undo | u TODO", "Mark TODO item as not done"
     def undo line
       todo = @list.find_by_line line
       if todo
@@ -105,6 +107,7 @@ module Todotxt
         error "No todo found at line #{line}"
       end
     end
+    map "u" => :undo
 
     desc "append | ap TODO STRING", "Append STRING to TODO"
     def append line, string
@@ -120,8 +123,8 @@ module Todotxt
     end
     map "ap" => :append
 
-    desc "rm TODO", "Remove TODO item"
-    def rm line
+    desc "remove | rm TODO", "Remove TODO item"
+    def remove line
       todo = @list.find_by_line line
       if todo
         @list.remove line
@@ -132,6 +135,7 @@ module Todotxt
         error "No todo found at line #{line}"
       end
     end
+    map "rm" => :remove
 
     #
     # File generation
