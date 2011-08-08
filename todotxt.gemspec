@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "thor", ">= 0.14.6"
+  s.add_dependency "rainbow", ">= 1.1.1"
 end
