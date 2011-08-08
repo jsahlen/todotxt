@@ -49,17 +49,17 @@ module Todotxt
     end
     map "lsd" => :lsdone
 
-    desc "list_projects | lsp", "List all projects"
-    def list_projects
+    desc "listproj | lsproj", "List all projects"
+    def listproj
       @list.projects.each { |p| say p }
     end
-    map "lsp" => :list_projects
+    map "lsproj" => :listproj
 
-    desc "list_contexts | lsc", "List all contexts"
-    def list_contexts
+    desc "lscon | lsc", "List all contexts"
+    def lscon
       @list.contexts.each { |c| say c }
     end
-    map "lsc" => :list_contexts
+    map "lsc" => :lscon
 
     #
     # Todo management
@@ -76,7 +76,7 @@ module Todotxt
     end
     map "a" => :add
 
-    desc "do | d ITEM#[, ITEM#, ITEM#, ...]", "Mark ITEM# as done"
+    desc "do ITEM#[, ITEM#, ITEM#, ...]", "Mark ITEM# as done"
     def do line1, *lines
       lines.unshift(line1).each do |line|
         todo = @list.find_by_line line
@@ -90,7 +90,6 @@ module Todotxt
         end
       end
     end
-    map "d" => :do
 
     desc "undo | u ITEM#[, ITEM#, ITEM#, ...]", "Mark ITEM# item as not done"
     def undo line1, *lines
@@ -122,8 +121,8 @@ module Todotxt
     end
     map "p" => :pri
 
-    desc "depri | dp ITEM#[, ITEM#, ITEM#, ...]", "Remove priority for ITEM#"
-    def depri line1, *lines
+    desc "dp | depri ITEM#[, ITEM#, ITEM#, ...]", "Remove priority for ITEM#"
+    def dp line1, *lines
       lines.unshift(line1).each do |line|
         todo = @list.find_by_line line
         if todo
@@ -136,7 +135,7 @@ module Todotxt
         end
       end
     end
-    map "dp" => :depri
+    map "depri" => :dp
 
     desc "append | app ITEM# STRING", "Append STRING to ITEM#"
     def append line, str, *str2
