@@ -10,23 +10,27 @@ module Todotxt
 
       text = todo.to_s
 
-      text.gsub! PRIORITY_REGEX do |p|
-        case p[1]
-        when "A"
-          color = :red
-        when "B"
-          color = :blue
-        when "C"
-          color = :green
-        else
-          color = :white
+      unless todo.done
+        text.gsub! PRIORITY_REGEX do |p|
+          case p[1]
+          when "A"
+            color = :red
+          when "B"
+            color = :blue
+          when "C"
+            color = :green
+          else
+            color = :white
+          end
+
+          p.to_s.color(color).bright
         end
 
-        p.to_s.color(color).bright
+        text.gsub! PROJECT_REGEX, '\1'.color(:green)
+        text.gsub! CONTEXT_REGEX, '\1'.color(:cyan)
+      else
+        text = text.color(:black)
       end
-
-      text.gsub! PROJECT_REGEX, '\1'.color(:green)
-      text.gsub! CONTEXT_REGEX, '\1'.color(:cyan)
 
       ret = ""
 
