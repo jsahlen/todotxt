@@ -4,8 +4,13 @@ module Todotxt
 
     attr_accessor :todos
 
-    def initialize
+    def initialize file
       @todos = []
+      @file  = file
+
+      File.open(file).read.each_line do |l|
+        add l.strip unless l.empty?
+      end
     end
 
     def add str

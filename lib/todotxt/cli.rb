@@ -19,7 +19,7 @@ module Todotxt
       unless ["help", "generate_config"].include? ARGV[0]
         parse_config
 
-      @list = TodoList.new
+        @list = TodoList.new @txt_path
       end
     end
 
