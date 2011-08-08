@@ -33,6 +33,14 @@ module Todotxt
       self
     end
 
+    def to_txt
+      ret = ""
+
+      @todos.sort { |a,b| a.line <=> b.line }.each { |t| ret << t.to_s }
+
+      ret
+    end
+
     def to_a
       map { |t| ["#{t.line}. ", t.to_s] }
     end
