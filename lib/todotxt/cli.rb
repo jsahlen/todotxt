@@ -182,9 +182,9 @@ module Todotxt
       end
     end
 
-    desc "remove | rm ITEM#[, ITEM#, ITEM#, ...]", "Remove ITEM#"
+    desc "del | rm ITEM#[, ITEM#, ITEM#, ...]", "Remove ITEM#"
     method_option :force, :type => :boolean, :aliases => "-f", :desc => "Don't confirm removal"
-    def remove line1, *lines
+    def del line1, *lines
       lines.unshift(line1).each do |line|
         todo = @list.find_by_line line
         if todo
@@ -200,7 +200,7 @@ module Todotxt
         end
       end
     end
-    map "rm" => :remove
+    map "rm" => :del
 
     #
     # File generation
