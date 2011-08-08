@@ -36,13 +36,19 @@ module Todotxt
         return
       end
 
-      priority_string = new_priority ? "(#{new_priority.upcase}) " : ""
+      if new_priority
+        new_priority = new_priority.upcase
+      end
+
+      priority_string = new_priority ? "(#{new_priority}) " : ""
 
       if priority
         @text.gsub! PRIORITY_REGEX, priority_string
       else
         @text = "#{priority_string}#{text}".strip
       end
+
+      @priority = new_priority
     end
 
     def append appended_text=""
