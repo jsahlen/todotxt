@@ -38,5 +38,17 @@ module Todotxt
       ret << "#{text}"
     end
 
+    def warn message=""
+      puts "WARN: #{message}".color(:yellow)
+    end
+
+    def notice message=""
+      puts message.color(:green)
+    end
+
+    def error message=""
+      puts "ERROR: #{message}".color(:red)
+    end
+
   end
 end

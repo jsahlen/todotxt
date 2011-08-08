@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "thor", ">= 0.14.6"
   s.add_dependency "rainbow", ">= 1.1.1"
+  s.add_dependency "parseconfig", ">= 0.5.2"
 end

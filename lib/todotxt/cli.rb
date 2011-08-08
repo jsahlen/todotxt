@@ -1,21 +1,26 @@
 require "thor"
 require "rainbow"
-
-require "pp"
+require "parseconfig"
 
 module Todotxt
-  CFG_PATH = File.expand_path("~/.todotxt.fg")
+  CFG_PATH = File.expand_path("~/.todotxt.cfg")
 
   class CLI < Thor
     include Thor::Actions
     include Todotxt::CLIHelpers
 
+    def self.source_root
+      File.join File.dirname(__FILE__), "..", "..", "conf"
+    end
+
     def initialize(*args)
       super
 
-      parse_config
+      unless ["help", "generate_config"].include? ARGV[0]
+        parse_config
 
       @list = TodoList.new
+      end
     end
 
     desc "list | ls [SEARCH]", "List all todos, or todos matching SEARCH"
@@ -60,6 +65,17 @@ module Todotxt
       end
     end
 
+    desc "generate_config", "Create a .todotxt.cfg file in your home folder, containing the path to todo.txt"
+    def generate_config
+      copy_file "todotxt.cfg", CFG_PATH
+
+      parse_config
+    end
+
+    desc "generate_cfg", "Create a sample todo.txt"
+    def generate_txt
+      copy_file "todo.txt", @txt_path
+    end
     desc "version", "Show todotxt version"
     def version
       say "todotxt #{VERSION}"
@@ -78,7 +94,39 @@ module Todotxt
 
     def parse_config
       unless File.exist? CFG_PATH
-        generate_config
+        puts "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
+        confirm_generate = yes? "Create ~/.todotxt.cfg? [y/N]"
+
+        if confirm_generate
+          generate_config
+        else
+          puts ""
+          exit
+        end
+      end
+
+      cfg = ParseConfig.new(CFG_PATH)
+
+      txt = cfg.get_value "todo_txt_path"
+
+      if txt
+        @txt_path = File.expand_path(txt)
+
+        unless File.exist? @txt_path
+          puts "#{txt} doesn't exist yet. Would you like to genereate a sample file?"
+          confirm_generate = yes? "Create #{txt}? [y/N]"
+
+          if confirm_generate
+            generate_txt
+          else
+            puts ""
+            exit
+          end
+        end
+      else
+        error "Couldn't find todo_txt_path setting in ~/.todotxt.cfg."
+        puts "Please run the following to create a new configuration file:"
+        puts "    todotxt generate_config"
         exit
       end
     end
