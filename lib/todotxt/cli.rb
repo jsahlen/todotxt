@@ -67,8 +67,8 @@ module Todotxt
 
     desc "add | a TEXT", "Add a new Todo item"
     def add(str, *str2)
-      str = "#{str} #{str2.join(' ')}"
-      todo = @list.add str
+      string = "#{str} #{str2.join(' ')}"
+      todo = @list.add string
 
       puts format_todo(todo)
 
@@ -139,7 +139,8 @@ module Todotxt
     map "dp" => :depri
 
     desc "append | app ITEM# STRING", "Append STRING to ITEM#"
-    def append line, string
+    def append line, str, *str2
+      string = "#{str} #{str2.join(' ')}"
       todo = @list.find_by_line line
       if todo
         todo.append string
@@ -153,7 +154,8 @@ module Todotxt
     map "app" => :append
 
     desc "prepend | prep ITEM# STRING", "Prepend STRING to ITEM#"
-    def prepend line, string
+    def prepend line, str, *str2
+      string = "#{str} #{str2.join(' ')}"
       todo = @list.find_by_line line
       if todo
         todo.prepend string
@@ -168,10 +170,10 @@ module Todotxt
 
     desc "replace ITEM# TEXT", "Completely replace ITEM# text with TEXT"
     def replace line, str, *str2
-      str = "#{str} #{str2.join(' ')}"
+      string = "#{str} #{str2.join(' ')}"
       todo = @list.find_by_line line
       if todo
-        todo.replace str
+        todo.replace string
         puts format_todo(todo)
 
         @list.save
