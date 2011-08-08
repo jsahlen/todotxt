@@ -3,5 +3,11 @@
 libdir = File.join(File.dirname(File.dirname(__FILE__)), "lib")
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
+args = ARGV.clone
+
+if args.empty?
+  args.push "ls"
+end
+
 require "todotxt"
-Todotxt::CLI.start
+Todotxt::CLI.start(args)
