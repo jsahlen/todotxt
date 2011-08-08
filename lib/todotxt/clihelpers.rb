@@ -43,7 +43,7 @@ module Todotxt
     end
 
     def notice message=""
-      puts message.color(:green)
+      puts "=> #{message}".color(:green)
     end
 
     def error message=""

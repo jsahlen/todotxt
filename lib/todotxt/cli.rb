@@ -77,16 +77,11 @@ module Todotxt
     map "a" => :add
 
     desc "do | d TODO", "Mark TODO item as done"
-    method_option :remove, :type => :boolean, :aliases => "--rm", :desc => "Remove from list after marking"
     def do line
       todo = @list.find_by_line line
       if todo
         todo.do
         puts format_todo(todo)
-
-        if options[:remove]
-          @list.remove line
-        end
 
         @list.save
       else
@@ -124,13 +119,17 @@ module Todotxt
     map "ap" => :append
 
     desc "remove | rm TODO", "Remove TODO item"
+    method_option :force, :type => :boolean, :aliases => "-f", :desc => "Don't confirm removal"
     def remove line
       todo = @list.find_by_line line
       if todo
-        @list.remove line
-        notice "Removed from list"
+        say format_todo(todo)
+        if options[:force] || yes?("Remove this item? [y/N]")
+          @list.remove line
+          notice "Removed from list"
 
-        @list.save
+          @list.save
+        end
       else
         error "No todo found at line #{line}"
       end
