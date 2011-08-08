@@ -127,6 +127,7 @@ module Todotxt
     desc "generate_config", "Create a .todotxt.cfg file in your home folder, containing the path to todo.txt"
     def generate_config
       copy_file "todotxt.cfg", CFG_PATH
+      puts ""
 
       parse_config
     end
@@ -134,6 +135,7 @@ module Todotxt
     desc "generate_cfg", "Create a sample todo.txt"
     def generate_txt
       copy_file "todo.txt", @txt_path
+      puts ""
     end
 
     #
@@ -177,7 +179,7 @@ module Todotxt
         @txt_path = File.expand_path(txt)
 
         unless File.exist? @txt_path
-          puts "#{txt} doesn't exist yet. Would you like to genereate a sample file?"
+          puts "#{txt} doesn't exist yet. Would you like to generate a sample file?"
           confirm_generate = yes? "Create #{txt}? [y/N]"
 
           if confirm_generate
