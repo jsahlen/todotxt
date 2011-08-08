@@ -29,6 +29,7 @@ module Todotxt
 
     desc "list | ls [SEARCH]", "List all todos, or todos matching SEARCH"
     method_option :done, :type => :boolean, :aliases => "-d"
+    method_option :simple, :type => :boolean
     def list search=""
       with_done = false
 
@@ -36,7 +37,7 @@ module Todotxt
 
       @list.filter(search, :with_done => with_done)
 
-      render_list
+      render_list :simple => !!options[:simple]
     end
     map "ls" => :list
 
@@ -149,12 +150,20 @@ module Todotxt
 
   private
 
-    def render_list
+    def render_list opts={}
       numsize = @list.count + 1
       numsize = numsize.to_s.length + 0
 
       @list.each do |t|
-        say format_todo(t, numsize)
+        if opts[:simple]
+          say "#{t.line} #{t.to_s}"
+        else
+          say format_todo(t, numsize)
+        end
+      end
+
+      unless opts[:simple]
+        puts "TODO: #{@list.count} items".color(:black).bright
       end
     end
 
