@@ -108,6 +108,36 @@ module Todotxt
     end
     map "u" => :undo
 
+    desc "pri | p ITEM# PRIORITY", "Set priority of ITEM# to PRIORITY"
+    def pri line, priority
+      todo = @list.find_by_line line
+      if todo
+        todo.prioritize priority
+        puts format_todo(todo)
+
+        @list.save
+      else
+        error "No todo found at line #{line}"
+      end
+    end
+    map "p" => :pri
+
+    desc "depri | dp ITEM#[, ITEM#, ITEM#, ...]", "Remove priority for ITEM#"
+    def depri line1, *lines
+      lines.unshift(line1).each do |line|
+        todo = @list.find_by_line line
+        if todo
+          todo.prioritize
+          puts format_todo(todo)
+
+          @list.save
+        else
+          error "No todo found at line #{line}"
+        end
+      end
+    end
+    map "dp" => :depri
+
     desc "append | ap ITEM# STRING", "Append STRING to ITEM#"
     def append line, string
       todo = @list.find_by_line line

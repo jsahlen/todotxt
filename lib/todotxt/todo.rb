@@ -31,6 +31,20 @@ module Todotxt
       end
     end
 
+    def prioritize new_priority=nil
+      if new_priority && !new_priority.match(/^[A-Z]$/i)
+        return
+      end
+
+      priority_string = new_priority ? "(#{new_priority.upcase}) " : ""
+
+      if priority
+        @text.gsub! PRIORITY_REGEX, priority_string
+      else
+        @text = "#{priority_string}#{text}".strip
+      end
+    end
+
     def append appended_text=""
       @text << " " << appended_text
     end
