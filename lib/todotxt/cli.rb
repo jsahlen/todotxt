@@ -6,8 +6,7 @@ module Todotxt
 
     desc "version", "Show todotxt version"
     def version
-      require "todotxt/version"
-      say "todotxt #{Todotxt::VERSION}"
+      say "todotxt #{VERSION}"
     end
 
   end
