@@ -108,6 +108,21 @@ module Todotxt
       end
     end
 
+    desc "append | ap TODO STRING", "Append STRING to TODO"
+    def append line, string
+      todo = @list.find_by_line line
+      if todo
+        todo.append string
+        notice "Appended"
+        puts format_todo(todo)
+
+        @list.save
+      else
+        error "No todo found at line #{line}"
+      end
+    end
+    map "ap" => :append
+
     desc "rm TODO", "Remove TODO item"
     def rm line
       todo = @list.find_by_line line

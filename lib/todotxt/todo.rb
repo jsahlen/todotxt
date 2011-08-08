@@ -31,6 +31,10 @@ module Todotxt
       end
     end
 
+    def append appended_text=""
+      @text << " " << appended_text
+    end
+
     def to_s
       text.clone
     end
