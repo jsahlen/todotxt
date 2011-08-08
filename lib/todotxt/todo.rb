@@ -31,7 +31,7 @@ module Todotxt
       end
     end
 
-    def prioritize new_priority=nil
+    def prioritize new_priority=nil, opts={}
       if new_priority && !new_priority.match(/^[A-Z]$/i)
         return
       end
@@ -42,7 +42,7 @@ module Todotxt
 
       priority_string = new_priority ? "(#{new_priority}) " : ""
 
-      if priority
+      if priority && !opts[:force]
         @text.gsub! PRIORITY_REGEX, priority_string
       else
         @text = "#{priority_string}#{text}".strip
@@ -53,6 +53,11 @@ module Todotxt
 
     def append appended_text=""
       @text << " " << appended_text
+    end
+
+    def prepend prepended_text=""
+      @text = "#{prepended_text} #{text.gsub(PRIORITY_REGEX, '')}"
+      prioritize priority, :force => true
     end
 
     def to_s

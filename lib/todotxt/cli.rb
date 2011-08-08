@@ -138,7 +138,7 @@ module Todotxt
     end
     map "dp" => :depri
 
-    desc "append | ap ITEM# STRING", "Append STRING to ITEM#"
+    desc "append | app ITEM# STRING", "Append STRING to ITEM#"
     def append line, string
       todo = @list.find_by_line line
       if todo
@@ -150,7 +150,21 @@ module Todotxt
         error "No todo found at line #{line}"
       end
     end
-    map "ap" => :append
+    map "app" => :append
+
+    desc "prepend | prep ITEM# STRING", "Prepend STRING to ITEM#"
+    def prepend line, string
+      todo = @list.find_by_line line
+      if todo
+        todo.prepend string
+        puts format_todo(todo)
+
+        @list.save
+      else
+        error "No todo found at line #{line}"
+      end
+    end
+    map "prep" => :prepend
 
     desc "remove | rm ITEM#[, ITEM#, ITEM#, ...]", "Remove ITEM#"
     method_option :force, :type => :boolean, :aliases => "-f", :desc => "Don't confirm removal"
