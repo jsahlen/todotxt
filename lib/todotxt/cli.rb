@@ -166,6 +166,20 @@ module Todotxt
     end
     map "prep" => :prepend
 
+    desc "replace ITEM# TEXT", "Completely replace ITEM# text with TEXT"
+    def replace line, str, *str2
+      str = "#{str} #{str2.join(' ')}"
+      todo = @list.find_by_line line
+      if todo
+        todo.replace str
+        puts format_todo(todo)
+
+        @list.save
+      else
+        error "No todo found at line #{line}"
+      end
+    end
+
     desc "remove | rm ITEM#[, ITEM#, ITEM#, ...]", "Remove ITEM#"
     method_option :force, :type => :boolean, :aliases => "-f", :desc => "Don't confirm removal"
     def remove line1, *lines

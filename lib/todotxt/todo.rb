@@ -9,8 +9,13 @@ module Todotxt
     attr_accessor :done
 
     def initialize text, line=nil
-      @text = text
       @line = line
+
+      create_from_text text
+    end
+
+    def create_from_text text
+      @text = text
       @priority = text.scan(PRIORITY_REGEX).flatten.first || nil
       @projects = text.scan(PROJECT_REGEX).flatten.uniq   || []
       @contexts = text.scan(CONTEXT_REGEX).flatten.uniq   || []
@@ -58,6 +63,10 @@ module Todotxt
     def prepend prepended_text=""
       @text = "#{prepended_text} #{text.gsub(PRIORITY_REGEX, '')}"
       prioritize priority, :force => true
+    end
+
+    def replace text
+      create_from_text text
     end
 
     def to_s
