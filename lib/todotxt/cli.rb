@@ -28,8 +28,8 @@ module Todotxt
     #
 
     desc "list | ls [SEARCH]", "List all todos, or todos matching SEARCH"
-    method_option :done, :type => :boolean, :aliases => "-d"
-    method_option :simple, :type => :boolean
+    method_option :done,   :type => :boolean, :aliases => "-d", :desc => "Include todo items that have been marked as done"
+    method_option :simple, :type => :boolean, :desc => "Simple output (for scripts, etc)"
     def list search=""
       with_done = false
 
@@ -76,12 +76,11 @@ module Todotxt
     map "a" => :add
 
     desc "do TODO", "Mark TODO item as done"
-    method_option :remove, :type => :boolean, :aliases => "--rm"
+    method_option :remove, :type => :boolean, :aliases => "--rm", :desc => "Remove from list after marking"
     def do line
       todo = @list.find_by_line line
       if todo
         todo.do
-        notice "Marked as done"
         puts format_todo(todo)
 
         if options[:remove]
@@ -99,7 +98,6 @@ module Todotxt
       todo = @list.find_by_line line
       if todo
         todo.undo
-        notice "Marked as not done"
         puts format_todo(todo)
 
         @list.save
@@ -113,7 +111,6 @@ module Todotxt
       todo = @list.find_by_line line
       if todo
         todo.append string
-        notice "Appended"
         puts format_todo(todo)
 
         @list.save
