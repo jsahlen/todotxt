@@ -21,6 +21,10 @@ module Todotxt
       return todo
     end
 
+    def remove line
+      @todos.reject! { |t| t.line.to_s == line }
+    end
+
     def projects
       map { |t| t.projects }.flatten.uniq.sort
     end
@@ -29,21 +33,44 @@ module Todotxt
       map { |t| t.contexts }.flatten.uniq.sort
     end
 
+    def find_by_line line
+      @todos.find { |t| t.line.to_s == line }
+    end
+
+    def save
+      File.open(@file, "w") { |f| f.write to_txt }
+    end
+
     def each &block
       @todos.each &block
     end
 
-    def filter search=""
-      @todos.select! { |t| t.text.downcase.include?(search.downcase) }
+    def filter search="", opts={}
+      @todos.select! do |t|
+        select = false
+
+        text = t.to_s.downcase
+
+        if opts[:only_done]
+          select = true if text.match DONE_REGEX
+        else
+          if opts[:with_done]
+            select = true
+          else
+            select = true unless text.match DONE_REGEX
+          end
+        end
+
+        select = false unless text.include?(search.downcase)
+
+        select
+      end
+
       self
     end
 
     def to_txt
-      ret = ""
-
-      @todos.sort { |a,b| a.line <=> b.line }.each { |t| ret << t.to_s }
-
-      ret
+      @todos.sort { |a,b| a.line <=> b.line }.map { |t| t.to_s.strip }.join("\n")
     end
 
     def to_a

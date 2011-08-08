@@ -23,14 +23,45 @@ module Todotxt
       end
     end
 
+    #
+    # Listing
+    #
+
     desc "list | ls [SEARCH]", "List all todos, or todos matching SEARCH"
+    method_option :done, :type => :boolean, :aliases => "-d"
     def list search=""
-      puts @hello
-      @list.filter(search)
+      with_done = false
+
+      with_done = true if options[:done]
+
+      @list.filter(search, :with_done => with_done)
 
       render_list
     end
     map "ls" => :list
+
+    desc "done | lsdone", "List all done items"
+    def done search=""
+      @list.filter(search, :only_done => true)
+
+      render_list
+    end
+
+    desc "list_projects | lsp", "List all projects"
+    def list_projects
+      @list.projects.each { |p| say p }
+    end
+    map "lsp" => :list_projects
+
+    desc "list_contexts | lsc", "List all contexts"
+    def list_contexts
+      @list.contexts.each { |c| say c }
+    end
+    map "lsc" => :list_contexts
+
+    #
+    # Todo management
+    #
 
     desc "add | a TEXT", "Add a new Todo item"
     def add(str, *str2)
@@ -38,32 +69,60 @@ module Todotxt
       todo = @list.add str
 
       puts format_todo(todo)
+
+      @list.save
     end
     map "a" => :add
 
-    desc "list_projects | lsp", "List all projects"
-    def list_projects
-      @list.projects.each { |p| say p.color(:green) }
-    end
-    map "lsp" => :list_projects
+    desc "do TODO", "Mark TODO item as done"
+    method_option :remove, :type => :boolean, :aliases => "--rm"
+    def do line
+      todo = @list.find_by_line line
+      if todo
+        todo.do
+        notice "Marked as done"
+        puts format_todo(todo)
 
-    desc "list_contexts | lsc", "List all contexts"
-    def list_contexts
-      @list.contexts.each { |c| say c.color(:cyan) }
-    end
-    map "lsc" => :list_contexts
+        if options[:remove]
+          @list.remove line
+        end
 
-    desc "generate_config", "Create a .todotxt.cfg file in your home folder, containing the path to todo.txt"
-    def generate_config
-      say "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself."
-      confirm_generate = yes? "=> ".color(:green) + "Create ~/.todotxt.cfg? [y/N]"
-
-      if confirm_generate
-        puts "yes"
+        @list.save
       else
-        puts "no"
+        error "No todo found at line #{line}"
       end
     end
+
+    desc "undo TODO", "Mark TODO item as not done"
+    def undo line
+      todo = @list.find_by_line line
+      if todo
+        todo.undo
+        notice "Marked as not done"
+        puts format_todo(todo)
+
+        @list.save
+      else
+        error "No todo found at line #{line}"
+      end
+    end
+
+    desc "rm TODO", "Remove TODO item"
+    def rm line
+      todo = @list.find_by_line line
+      if todo
+        @list.remove line
+        notice "Removed from list"
+
+        @list.save
+      else
+        error "No todo found at line #{line}"
+      end
+    end
+
+    #
+    # File generation
+    #
 
     desc "generate_config", "Create a .todotxt.cfg file in your home folder, containing the path to todo.txt"
     def generate_config
@@ -76,12 +135,17 @@ module Todotxt
     def generate_txt
       copy_file "todo.txt", @txt_path
     end
+
+    #
+    # Extras
+    #
+
     desc "version", "Show todotxt version"
     def version
       say "todotxt #{VERSION}"
     end
 
-    private
+  private
 
     def render_list
       numsize = @list.count + 1

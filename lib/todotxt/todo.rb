@@ -19,20 +19,20 @@ module Todotxt
 
     def do
       unless done
-        @text = "x #{text}"
+        @text = "x #{text}".strip
         @done = true
       end
     end
 
     def undo
       if done
-        @text = text.sub(DONE_REGEX, "")
+        @text = text.sub(DONE_REGEX, "").strip
         @done = false
       end
     end
 
     def to_s
-      text
+      text.clone
     end
 
     def <=> b

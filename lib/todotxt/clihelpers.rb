@@ -27,14 +27,14 @@ module Todotxt
         end
 
         text.gsub! PROJECT_REGEX, '\1'.color(:green)
-        text.gsub! CONTEXT_REGEX, '\1'.color(:cyan)
+        text.gsub! CONTEXT_REGEX, '\1'.color(:blue)
       else
-        text = text.color(:black)
+        text = text.color(:black).bright
       end
 
       ret = ""
 
-      ret << "#{line} ".color(:black)
+      ret << "#{line}. ".color(:black).bright
       ret << "#{text}"
     end
 
