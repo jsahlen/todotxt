@@ -1,3 +1,5 @@
+require "todotxt/todo"
+
 module Todotxt
   class TodoList
     include Enumerable
@@ -22,7 +24,7 @@ module Todotxt
     end
 
     def remove line
-      @todos.reject! { |t| t.line.to_s == line }
+      @todos.reject! { |t| t.line.to_s == line.to_s }
     end
 
     def projects
@@ -34,7 +36,7 @@ module Todotxt
     end
 
     def find_by_line line
-      @todos.find { |t| t.line.to_s == line }
+      @todos.find { |t| t.line.to_s == line.to_s }
     end
 
     def save
@@ -52,12 +54,12 @@ module Todotxt
         text = t.to_s.downcase
 
         if opts[:only_done]
-          select = true if text.match DONE_REGEX
+          select = true if t.done
         else
           if opts[:with_done]
             select = true
           else
-            select = true unless text.match DONE_REGEX
+            select = true unless t.done
           end
         end
 

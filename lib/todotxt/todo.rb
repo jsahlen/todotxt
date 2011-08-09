@@ -1,3 +1,5 @@
+require "todotxt/regex"
+
 module Todotxt
   class Todo
 
