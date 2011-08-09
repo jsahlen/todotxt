@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Todotxt::VERSION
   s.authors     = ["Johan Sahlén"]
   s.email       = ["johan@monospace.se"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/jsahlen/todotxt"
   s.summary     = %q{todo.txt with a Ruby flair}
   s.description = %q{Interact with your todo.txt using a Ruby-base command-line tool}
 
