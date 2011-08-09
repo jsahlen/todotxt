@@ -43,7 +43,7 @@ todo.txt.
       todotxt del | rm ITEM#[, ITEM#, ITEM#, ...]    # Remove ITEM#
       todotxt do ITEM#[, ITEM#, ITEM#, ...]          # Mark ITEM# as done
       todotxt dp | depri ITEM#[, ITEM#, ITEM#, ...]  # Remove priority for ITEM#
-      todotxt generate_cfg                           # Create a sample todo.txt
+      todotxt generate_txt                           # Create a sample todo.txt
       todotxt generate_config                        # Create a .todotxt.cfg file in your home folder, containing the path to todo.txt
       todotxt help [TASK]                            # Describe available tasks or one specific task
       todotxt list | ls [SEARCH]                     # List all todos, or todos matching SEARCH

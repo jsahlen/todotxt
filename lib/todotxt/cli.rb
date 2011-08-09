@@ -213,7 +213,7 @@ module Todotxt
       parse_config
     end
 
-    desc "generate_cfg", "Create a sample todo.txt"
+    desc "generate_txt", "Create a sample todo.txt"
     def generate_txt
       copy_file "todo.txt", @txt_path
       puts ""
