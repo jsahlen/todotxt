@@ -16,14 +16,14 @@ module Todotxt
           when "A"
             color = :red
           when "B"
-            color = :blue
+            color = :yellow
           when "C"
             color = :green
           else
             color = :white
           end
 
-          p.to_s.color(color).bright
+          p.to_s.color(color)
         end
 
         text.gsub! PROJECT_REGEX, '\1'.color(:green)
