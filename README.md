@@ -61,7 +61,7 @@ Calling simply `todotxt` will automatically run the `ls` command.
 
 ## Screenshot
 
-![Todotxt screenshot](http://static.jsahlen.se/misc/todotxt_screenshot.png)
+[Here](http://static.jsahlen.se/misc/todotxt_screenshot.png)
 
 *Screenshot of Todotxt in a Terminal window using [Solarized](http://ethanschoonover.com/solarized) colors.*
 
