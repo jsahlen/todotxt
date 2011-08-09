@@ -4,7 +4,7 @@ describe Todotxt::TodoList do
 
   describe "with simple list" do
     before :each do
-      @list = Todotxt::TodoList.new File.join(File.dirname(__FILE__), "..", "fixtures", "simple_todo.txt")
+      @list = Todotxt::TodoList.new File.join(File.dirname(__FILE__), "fixtures", "simple_todo.txt")
     end
 
     it "should parse a file on creation" do
@@ -75,7 +75,7 @@ EOF
 
   describe "with complex list" do
     before :each do
-      @list = Todotxt::TodoList.new File.join(File.dirname(__FILE__), "..", "fixtures", "complex_todo.txt")
+      @list = Todotxt::TodoList.new File.join(File.dirname(__FILE__), "fixtures", "complex_todo.txt")
     end
 
     it "should sort itself automatically on parse" do
