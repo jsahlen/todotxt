@@ -11,11 +11,18 @@ Todotxt is a ruby CLI interface to work with a
 
 ## Install
 
+### From RubyGems.org
+
+    gem install todotxt
+
+### Manually
+
 Clone from [jsahlen/todotxt](http://github.com/jsahlen/todotxt) and do
 
     rake install
 
-I might release it as a proper gem in the future…
+
+## Configuration
 
 Todotxt relies on a configuration file (`.todotxt.cfg`) in your home directory,
 which points to the location of your todo.txt. You can run
