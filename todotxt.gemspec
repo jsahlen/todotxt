@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency "rainbow", "~> 1.1.4"
   s.add_dependency "parseconfig", "~> 1.0.2"
 
+  s.add_development_dependency "rake"
   s.add_development_dependency "rspec", "~> 2.11.0"
 end
