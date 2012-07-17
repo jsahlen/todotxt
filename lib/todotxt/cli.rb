@@ -262,7 +262,7 @@ module Todotxt
 
       cfg = ParseConfig.new(CFG_PATH)
 
-      txt = cfg.get_value "todo_txt_path"
+      txt = cfg["todo_txt_path"]
 
       if txt
         @txt_path = File.expand_path(txt)

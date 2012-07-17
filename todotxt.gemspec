@@ -18,9 +18,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "thor", ">= 0.14.6"
-  s.add_dependency "rainbow", ">= 1.1.1"
-  s.add_dependency "parseconfig", ">= 0.5.2"
+  s.add_dependency "thor", "~> 0.15.4"
+  s.add_dependency "rainbow", "~> 1.1.4"
+  s.add_dependency "parseconfig", "~> 1.0.2"
 
-  s.add_development_dependency "rspec", ">= 2.6.0"
+  s.add_development_dependency "rspec", "~> 2.11.0"
 end
