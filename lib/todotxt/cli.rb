@@ -19,9 +19,28 @@ module Todotxt
       unless ["help", "generate_config"].include? ARGV[0]
         parse_config
 
-        @list = TodoList.new @txt_path
+        if options[:file]
+          file_sym = options[:file].to_sym
+          if @files.has_key? file_sym
+            @file = @files[file_sym]
+          else
+            error "no file set for '#{options[:file]}' in config."
+            puts  "files defined are:"
+            @files.each do |sym, file|
+              puts "#{sym}: #{file}"
+            end
+            exit
+          end
+        else
+          @file = @files[:todo]
+        end
+        @list = TodoList.new @file
       end
     end
+
+    class_option :file, :type => :string, :desc => "Use a different file than todo.txt
+     E.g. use 'done' to have the action performed on the file you set for 'done' in the todotxt
+     configuration under [files]."
 
     #
     # Listing
@@ -220,7 +239,7 @@ module Todotxt
 
     desc "generate_txt", "Create a sample todo.txt"
     def generate_txt
-      copy_file "todo.txt", @txt_path
+      copy_file "todo.txt", @files[:todo]
       puts ""
     end
 
@@ -266,14 +285,24 @@ module Todotxt
       end
 
       cfg = ParseConfig.new(CFG_PATH)
+      @files = {}
+      cfg["files"].each do |name, file|
+        unless file.empty?
+          path = File.expand_path file
+          @files[name.to_sym] = path if File.exists? path
+        end
+      end
 
-      txt = cfg["todo_txt_path"]
+      # Deprecation warning for old cfg file
+      # @TODO: remove after a few releases.
+      unless cfg["todo_txt_path"].nil?
+        warn "DEPRECATION: you are using deprecated todo_txt_path setting in ~/.todotxt.cfg"
+        puts "Please change this to use \n\t[files]\n\ttodo  = ~/path/to/todo.txt";
+      end
 
-      if txt
-        @txt_path = File.expand_path(txt)
-        @editor   = cfg["todo_txt_editor"] || ENV["EDITOR"]
 
-        unless File.exist? @txt_path
+      if @files.has_key? :todo
+        unless File.exist? @files[:todo]
           puts "#{txt} doesn't exist yet. Would you like to generate a sample file?"
           confirm_generate = yes? "Create #{txt}? [y/N]"
 
