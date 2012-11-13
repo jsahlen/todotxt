@@ -296,6 +296,13 @@ module Todotxt
         end
       end
 
+      # Backwards compatibility with todo_txt_path
+      #   when old variable is still set, and no files=>todo 
+      #   given, fallback to this old version.
+      if @cfg.has_key? "todo_txt_path"
+        @files[:todo] ||= @cfg["todo_txt_path"]
+      end
+
       # Determine what file should be activated, set that in @file
       if options[:file]
         file_sym = options[:file].to_sym
