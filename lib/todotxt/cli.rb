@@ -201,6 +201,11 @@ module Todotxt
     end
     map "rm" => :del
 
+    desc "edit", "Open todo.txt file in your default editor"
+    def edit
+      system "#{@editor} #{@txt_path}"
+    end
+
     #
     # File generation
     #
@@ -266,6 +271,7 @@ module Todotxt
 
       if txt
         @txt_path = File.expand_path(txt)
+        @editor   = cfg["todo_txt_editor"] || ENV["EDITOR"]
 
         unless File.exist? @txt_path
           puts "#{txt} doesn't exist yet. Would you like to generate a sample file?"
