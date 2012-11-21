@@ -304,7 +304,7 @@ module Todotxt
       # Backwards compatibility with todo_txt_path
       #   when old variable is still set, and no files=>todo 
       #   given, fallback to this old version.
-      if @cfg.has_key? "todo_txt_path"
+      if @cfg["todo_txt_path"]
         @files[:todo] ||= @cfg["todo_txt_path"]
       end
 
@@ -323,27 +323,17 @@ module Todotxt
       # Deprecation warning for old cfg file
       # @TODO: remove after a few releases.
       unless @cfg["todo_txt_path"].nil?
-        warn "DEPRECATION: you are using deprecated todo_txt_path setting in ~/.todotxt.cfg"
-        puts "Please change this to use \n\t[files]\n\ttodo  = ~/path/to/todo.txt";
+        warn "DEPRECATION: you are using deprecated todo_txt_path setting in ~/.todotxt.cfg\n" \
+             "Please change this to use\n" \
+             "  [files]\n" \
+             "  todo  = ~/path/to/todo.txt\n"
       end
 
       # Determine if todo, the only required todo file is configured
       unless @files.has_key? :todo
-        error "Couldn't find 'todo' path setting in ~/.todotxt.cfg."
-        puts "Please run the following to create a new configuration file:"
-        puts "    todotxt generate_config"
-        exit
-      end
-
-      # Determine if the provided file exists
-      selected_file = options[:file]
-      unless selected_file && (@cfg["files"].has_key? selected_file)
-        error "no file set for '#{selected_file}' in config."
-        puts  "files defined are:"
-        @files.each do |sym, file|
-          puts "#{sym}: #{file}"
-        end
-        exit
+        error_and_exit  "Couldn't find 'todo' path setting in ~/.todotxt.cfg.\n" \
+                        "  Please run the following to create a new configuration file:\n" \
+                        "  todotxt generate_config" \
       end
     end
   end

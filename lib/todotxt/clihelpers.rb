@@ -3,7 +3,6 @@ module Todotxt
 
     def format_todo(todo, number_padding=nil)
       line = todo.line.to_s
-      
       if number_padding
         line = line.rjust number_padding
       end
@@ -50,5 +49,9 @@ module Todotxt
       puts "ERROR: #{message}".color(:red)
     end
 
+    def error_and_exit message =""
+      error message
+      exit
+    end
   end
 end
