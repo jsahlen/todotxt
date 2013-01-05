@@ -3,8 +3,6 @@ require "rainbow"
 require "parseconfig"
 
 module Todotxt
-  CFG_PATH = File.expand_path("~/.todotxt.cfg")
-
   class CLI < Thor
     include Thor::Actions
     include Todotxt::CLIHelpers
@@ -13,15 +11,17 @@ module Todotxt
       File.join File.dirname(__FILE__), "..", "..", "conf"
     end
 
-    def initialize(*args)
+    def initialize(config)
+      @config = config
+
+      ask_and_create_conf unless @config.file_exists?
+
       super
-
-      unless ["help", "generate_config"].include? ARGV[0]
-        parse_config
-
-        @list = TodoList.new @txt_path
-      end
     end
+
+    class_option :file, :type => :string, :desc => "Use a different file than todo.txt
+     E.g. use 'done' to have the action performed on the file you set for 'done' in the todotxt
+     configuration under [files]."
 
     #
     # Listing
@@ -201,6 +201,27 @@ module Todotxt
     end
     map "rm" => :del
 
+    desc "move | mv ITEM#[, ITEM#, ITEM#, ...] file", "Move ITEM# to another file"
+    def move line1, *lines, other_list_alias
+      if @files[other_list_alias.to_sym].nil?
+        error_and_exit "File alias #{other_list_alias} not found"
+      else
+        other_list = TodoList.new @files[other_list_alias.to_sym]
+      end
+
+      lines.unshift(line1).each do |line|
+        todo = @list.find_by_line line
+        if todo
+          @list.move other_list, line
+          notice format_todo(todo) +"\n" \
+                 "moved to #{otherlist}"
+        else
+          error "No todo found at line #{line}"
+        end
+      end
+    end
+    map "mv" => :move
+
     #
     # File generation
     #
@@ -209,13 +230,11 @@ module Todotxt
     def generate_config
       copy_file "todotxt.cfg", CFG_PATH
       puts ""
-
-      parse_config
     end
 
     desc "generate_txt", "Create a sample todo.txt"
     def generate_txt
-      copy_file "todo.txt", @txt_path
+      copy_file "todo.txt", @file
       puts ""
     end
 
@@ -229,7 +248,6 @@ module Todotxt
     end
 
   private
-
     def render_list opts={}
       numsize = @list.count + 1
       numsize = numsize.to_s.length + 0
@@ -247,42 +265,83 @@ module Todotxt
       end
     end
 
-    def parse_config
-      unless File.exist? CFG_PATH
-        puts "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
+    def ask_and_create_conf
+      @cfg = Config.new
+      if @cfg.file_exists?
+        say "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
         confirm_generate = yes? "Create ~/.todotxt.cfg? [y/N]"
 
         if confirm_generate
-          generate_config
+          @cfg.generate!
         else
           puts ""
           exit
         end
       end
+    end
 
-      cfg = ParseConfig.new(CFG_PATH)
+    def ask_and_create_files
+      if !File.exists? @file
+        puts "#{@file} doesn't exist yet. Would you like to generate a sample file?"
+        confirm_generate = yes? "Create #{@file}? [y/N]"
 
-      txt = cfg["todo_txt_path"]
+        if confirm_generate
+          generate_txt
+          ## Re-parse the file for future validation and usage.
+          parse_files
+        else
+          puts ""
+          exit
+        end
+      end
+    end
 
-      if txt
-        @txt_path = File.expand_path(txt)
+    def parse_files
+      @files = {}
+      @file = ""
 
-        unless File.exist? @txt_path
-          puts "#{txt} doesn't exist yet. Would you like to generate a sample file?"
-          confirm_generate = yes? "Create #{txt}? [y/N]"
+      return if (@cfg.nil? || @cfg["files"].nil?)
 
-          if confirm_generate
-            generate_txt
-          else
-            puts ""
-            exit
-          end
+      # Fill the @files from settings.
+      @cfg["files"].each do |name, file|
+        unless file.empty?
+          @files[name.to_sym] = File.expand_path(file)
+        end
+      end
+
+      # Backwards compatibility with todo_txt_path
+      #   when old variable is still set, and no files=>todo 
+      #   given, fallback to this old version.
+      if @cfg["todo_txt_path"]
+        @files[:todo] ||= @cfg["todo_txt_path"]
+      end
+
+      # Determine what file should be activated, set that in @file
+      if options[:file]
+        file_sym = options[:file].to_sym
+        if @files.has_key? file_sym
+          @file = @files[file_sym]
         end
       else
-        error "Couldn't find todo_txt_path setting in ~/.todotxt.cfg."
-        puts "Please run the following to create a new configuration file:"
-        puts "    todotxt generate_config"
-        exit
+        @file = @files[:todo]
+      end
+    end
+
+    def validate
+      # Deprecation warning for old cfg file
+      # @TODO: remove after a few releases.
+      unless @cfg["todo_txt_path"].nil?
+        warn "DEPRECATION: you are using deprecated todo_txt_path setting in ~/.todotxt.cfg\n" \
+             "Please change this to use\n" \
+             "  [files]\n" \
+             "  todo  = ~/path/to/todo.txt\n"
+      end
+
+      # Determine if todo, the only required todo file is configured
+      unless @files.has_key? :todo
+        error_and_exit  "Couldn't find 'todo' path setting in ~/.todotxt.cfg.\n" \
+                        "  Please run the following to create a new configuration file:\n" \
+                        "  todotxt generate_config" \
       end
     end
   end

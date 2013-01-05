@@ -9,15 +9,23 @@ module Todotxt
       else
         @config_path = config_path
       end
-      copy_new unless File.exists? @config_path
 
-      super @config_path
+      if file_exists?
+        super @config_path
+        validate
+      end
+    end
 
-      validate
+    def file_exists?
+      File.exists? @config_path
     end
 
     def files
       params["files"] || {"todo" => params["todo_txt_path"] }
+    end
+
+    def generate!
+      FileUtils.copy "conf/todotxt.cfg", @config_path
     end
 
     private
@@ -25,10 +33,6 @@ module Todotxt
       if params["files"] && params["todo_txt_path"]
         raise "Bad configuration file: use either files or todo_txt_path"
       end
-    end
-
-    def copy_new
-      FileUtils.copy "conf/todotxt.cfg", @config_path
     end
   end
 end
