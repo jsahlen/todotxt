@@ -209,6 +209,27 @@ module Todotxt
     end
     map "rm" => :del
 
+    desc "move | mv ITEM#[, ITEM#, ITEM#, ...] file", "Move ITEM# to another file"
+    def move line1, *lines, other_list_alias
+      if @files[other_list_alias.to_sym].nil?
+        error_and_exit "File alias #{other_list_alias} not found"
+      else
+        other_list = TodoList.new @files[other_list_alias.to_sym]
+      end
+
+      lines.unshift(line1).each do |line|
+        todo = @list.find_by_line line
+        if todo
+          @list.move other_list, line
+          notice format_todo(todo) +"\n" \
+                 "moved to #{otherlist}"
+        else
+          error "No todo found at line #{line}"
+        end
+      end
+    end
+    map "mv" => :move
+
     #
     # File generation
     #
