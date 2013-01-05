@@ -3,8 +3,6 @@ require "rainbow"
 require "parseconfig"
 
 module Todotxt
-  CFG_PATH = File.expand_path("~/.todotxt.cfg")
-
   class CLI < Thor
     include Thor::Actions
     include Todotxt::CLIHelpers
@@ -13,18 +11,12 @@ module Todotxt
       File.join File.dirname(__FILE__), "..", "..", "conf"
     end
 
-    def initialize(*args)
+    def initialize(config)
+      @config = config
+
+      ask_and_create_conf unless @config.file_exists?
+
       super
-
-      unless ["help", "generate_config"].include? ARGV[0]
-        @cfg = ParseConfig.new(CFG_PATH) if File.exists? CFG_PATH
-        parse_files
-        create_files_if_not_exists
-
-        validate
-
-        @list = TodoList.new @file
-      end
     end
 
     class_option :file, :type => :string, :desc => "Use a different file than todo.txt
@@ -273,22 +265,22 @@ module Todotxt
       end
     end
 
-    def create_files_if_not_exists
-      if @cfg.nil?
-        puts "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
+    def ask_and_create_conf
+      @cfg = Config.new
+      if @cfg.file_exists?
+        say "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
         confirm_generate = yes? "Create ~/.todotxt.cfg? [y/N]"
 
         if confirm_generate
-          generate_config
-          ## After generating the content, let's re-evaluate the config and files
-          @cfg = ParseConfig.new(CFG_PATH)
-          parse_files
+          @cfg.generate!
         else
           puts ""
           exit
         end
       end
+    end
 
+    def ask_and_create_files
       if !File.exists? @file
         puts "#{@file} doesn't exist yet. Would you like to generate a sample file?"
         confirm_generate = yes? "Create #{@file}? [y/N]"
