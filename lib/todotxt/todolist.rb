@@ -27,6 +27,11 @@ module Todotxt
       @todos.reject! { |t| t.line.to_s == line.to_s }
     end
 
+    def move line, other_list
+      other_list.add line
+      remove line
+    end
+
     def projects
       map { |t| t.projects }.flatten.uniq.sort
     end
