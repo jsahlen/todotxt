@@ -3,21 +3,24 @@ require "fileutils"
 
 module Todotxt
   class Config < ParseConfig
-    def initialize config_path = ""
-      if config_path.empty?
-        @config_path = File.join ENV["HOME"], ".todotxt.cfg"
+    def initialize config_file = ""
+      if config_file.empty?
+        @config_file = File.join ENV["HOME"], ".todotxt.cfg"
       else
-        @config_path = config_path
+        @config_file = config_file
       end
 
       if file_exists?
-        super @config_path
+        super @config_file
         validate
+      else
+        @params = {}
+        @groups = []
       end
     end
 
     def file_exists?
-      File.exists? @config_path
+      File.exists? @config_file
     end
 
     def files
@@ -25,7 +28,8 @@ module Todotxt
     end
 
     def generate!
-      FileUtils.copy File.join(File.dirname(File.expand_path(__FILE__)), "..", "..", "conf", "todotxt.cfg"), @config_path
+     FileUtils.copy File.join(File.dirname(File.expand_path(__FILE__)), "..", "..", "conf", "todotxt.cfg"), @config_file
+     import_config
     end
 
     private

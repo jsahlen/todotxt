@@ -7,6 +7,7 @@ Feature: Initialize
   Scenario: New installation asks and creates a config file
     When I run `todotxt` interactively
     And I type "yes"
+    And I type "no"
     Then it should pass with:
       """
       You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.
