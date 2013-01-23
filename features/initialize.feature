@@ -4,6 +4,19 @@ Feature: Initialize
   As a new user
   I want to set up example files
 
+  Scenario: Completely clean system asks to create both config and todotxt
+    When I run `todotxt` interactively
+    And I type "yes"
+    And I type "yes"
+    Then it should pass with:
+      """
+      Create ~/.todotxt.cfg? [y/N]
+      """
+    And it should pass with regexp:
+      """
+      Create (.*)\/todo.txt\? \[y\/N\]
+      """
+
   Scenario: New installation asks and creates a config file
     When I run `todotxt` interactively
     And I type "yes"
