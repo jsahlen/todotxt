@@ -14,8 +14,12 @@ module Todotxt
     def initialize(*args)
       super
       @config = Config.new
+      parse_files
       unless ["help", "generate_config"].include? ARGV[0]
         ask_and_create_conf unless @config.file_exists?
+      end
+      unless ["help", "generate_txt"].include? ARGV[0]
+        ask_and_create_files unless @file.exists?
       end
     end
 
@@ -283,39 +287,34 @@ module Todotxt
     end
 
     def ask_and_create_files
-      if !File.exists? @file
-        puts "#{@file} doesn't exist yet. Would you like to generate a sample file?"
-        confirm_generate = yes? "Create #{@file}? [y/N]"
+      puts "#{@file} doesn't exist yet. Would you like to generate a sample file?"
+      confirm_generate = yes? "Create #{@file}? [y/N]"
 
-        if confirm_generate
-          generate_txt
-          ## Re-parse the file for future validation and usage.
-          parse_files
-        else
-          puts ""
-          exit
-        end
+      if confirm_generate
+        @file.generate!
+      else
+        puts ""
+        exit
       end
     end
 
     def parse_files
       @files = {}
-      @file = ""
 
-      return if (@cfg.nil? || @cfg["files"].nil?)
+      return if (@config.nil? || @config["files"].nil?)
 
       # Fill the @files from settings.
-      @cfg["files"].each do |name, file|
-        unless file.empty?
-          @files[name.to_sym] = File.expand_path(file)
+      @config["files"].each do |name, file_path|
+        unless file_path.empty?
+          @files[name.to_sym] = TodoFile.new(file_path)
         end
       end
 
       # Backwards compatibility with todo_txt_path
       #   when old variable is still set, and no files=>todo 
       #   given, fallback to this old version.
-      if @cfg["todo_txt_path"]
-        @files[:todo] ||= @cfg["todo_txt_path"]
+      if @config["todo_txt_path"]
+        @files[:todo] ||= @config["todo_txt_path"]
       end
 
       # Determine what file should be activated, set that in @file

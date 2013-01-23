@@ -26,3 +26,13 @@ Feature: Initialize
        | option          | 
        | help            | 
        | generate_config | 
+
+  Scenario: New installation asks and creates a dummy todo.txt
+    Given a default config exists
+    When I run `todotxt` interactively
+    And I type "yes"
+    Then it should pass with:
+      """
+      todo.txt doesn't exist yet. Would you like to generate a sample file?
+      """
+    And a file named "todo.txt" should exist
