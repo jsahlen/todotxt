@@ -25,7 +25,7 @@ module Todotxt
     end
 
     def generate!
-      FileUtils.copy "conf/todotxt.cfg", @config_path
+      FileUtils.copy File.join(File.dirname(File.expand_path(__FILE__)), "..", "..", "conf", "todotxt.cfg"), @config_path
     end
 
     private
