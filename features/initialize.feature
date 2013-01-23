@@ -7,7 +7,7 @@ Feature: Initialize
   Background:
     Given a home directory
 
-  Scenario: todotxt
+  Scenario: New installation asks and creates a config file
     When I run `todotxt` interactively
     And I type "yes"
     Then it should pass with:
