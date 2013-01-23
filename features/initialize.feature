@@ -4,9 +4,6 @@ Feature: Initialize
   As a new user
   I want to set up example files
 
-  Background:
-    Given a home directory
-
   Scenario: New installation asks and creates a config file
     When I run `todotxt` interactively
     And I type "yes"
