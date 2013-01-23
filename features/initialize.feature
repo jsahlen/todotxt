@@ -34,12 +34,16 @@ Feature: Initialize
 
   Scenario Outline: New installation does not ask to create for certain options
     When I run `todotxt <option>`
-    Then a file named ".todotxt.cfg" should not exist
+    Then the output should not match:
+      """
+      \[y\/N\] \?
+      """
 
     Examples:
        | option          |
        | help            |
        | generate_config |
+       | generate_txt    |
 
   Scenario: New installation asks and creates a dummy todo.txt
     Given a default config exists

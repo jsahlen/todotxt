@@ -14,11 +14,9 @@ module Todotxt
     def initialize(*args)
       super
       @config = Config.new
-      unless ["help", "generate_config"].include? ARGV[0]
+      unless ["help", "generate_config", "generate_txt"].include? ARGV[0]
         ask_and_create_conf unless @config.file_exists?
-      end
-      parse_files
-      unless ["help", "generate_txt"].include? ARGV[0]
+        parse_conf
         ask_and_create_files unless @file.exists?
       end
     end
@@ -298,7 +296,7 @@ module Todotxt
       end
     end
 
-    def parse_files
+    def parse_conf
       @files = {}
 
       return if (@config.nil? || @config["files"].nil?)
