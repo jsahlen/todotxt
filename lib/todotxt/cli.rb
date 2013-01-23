@@ -273,7 +273,7 @@ module Todotxt
       confirm_generate = yes? "Create ~/.todotxt.cfg? [y/N]"
 
       if confirm_generate
-        @cfg.generate!
+        @config.generate!
       else
         puts ""
         exit
