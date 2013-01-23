@@ -5,7 +5,7 @@ module Todotxt
     #@arg mode, String, IO-mode, defaults to a+
     #@arg generate, Boolean, Force generation of a todofile from template
     def initialize path
-      @path = path
+      @path = File.expand_path(path)
     end
 
     # Generate a file from template
