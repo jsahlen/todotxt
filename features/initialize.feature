@@ -23,9 +23,9 @@ Feature: Initialize
     Then a file named ".todotxt.cfg" should not exist
 
     Examples:
-       | option          | 
-       | help            | 
-       | generate_config | 
+       | option          |
+       | help            |
+       | generate_config |
 
   Scenario: New installation asks and creates a dummy todo.txt
     Given a default config exists
