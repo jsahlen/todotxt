@@ -20,3 +20,12 @@ Feature: Initialize
     When I run `todotxt` interactively
     And I type "no"
     Then a file named ".todotxt.cfg" should not exist
+
+  Scenario Outline: New installation does not ask to create for certain options
+    When I run `todotxt <option>`
+    Then a file named ".todotxt.cfg" should not exist
+
+    Examples:
+       | option          | 
+       | help            | 
+       | generate_config | 
