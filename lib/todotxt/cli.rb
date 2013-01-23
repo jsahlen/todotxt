@@ -11,12 +11,10 @@ module Todotxt
       File.join File.dirname(__FILE__), "..", "..", "conf"
     end
 
-    def initialize(config)
-      @config = config
-
-      ask_and_create_conf unless @config.file_exists?
-
+    def initialize(*args)
       super
+      @config = Config.new
+      ask_and_create_conf unless @config.file_exists?
     end
 
     class_option :file, :type => :string, :desc => "Use a different file than todo.txt
@@ -271,17 +269,14 @@ module Todotxt
     end
 
     def ask_and_create_conf
-      @cfg = Config.new
-      if @cfg.file_exists?
-        say "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
-        confirm_generate = yes? "Create ~/.todotxt.cfg? [y/N]"
+      say "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
+      confirm_generate = yes? "Create ~/.todotxt.cfg? [y/N]"
 
-        if confirm_generate
-          @cfg.generate!
-        else
-          puts ""
-          exit
-        end
+      if confirm_generate
+        @cfg.generate!
+      else
+        puts ""
+        exit
       end
     end
 
