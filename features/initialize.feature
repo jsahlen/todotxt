@@ -50,3 +50,9 @@ Feature: Initialize
       todo.txt doesn't exist yet. Would you like to generate a sample file?
       """
     And a file named "todo.txt" should exist
+
+  Scenario: New installation does not create a sample file when I tell it not to
+    Given a default config exists
+    When I run `todotxt` interactively
+    And I type "no"
+    Then a file named "todo.txt" should not exist
