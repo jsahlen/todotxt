@@ -1,9 +1,6 @@
 module Todotxt
   class TodoFile
-    #From Kernel::File
-    #@arg filename, String, path to the file
-    #@arg mode, String, IO-mode, defaults to a+
-    #@arg generate, Boolean, Force generation of a todofile from template
+
     def initialize path
       @path = File.expand_path(path)
     end
