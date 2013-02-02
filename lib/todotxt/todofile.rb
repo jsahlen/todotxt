@@ -13,6 +13,14 @@ module Todotxt
       FileUtils.copy File.join(File.dirname(File.expand_path(__FILE__)), "..", "..", "conf", "todo.txt"), @path
     end
 
+    def path
+      @path
+    end
+
+    def basename
+      File.basename @path
+    end
+
     def exists?
       File.exists? File.expand_path(@path)
     end

@@ -15,9 +15,9 @@ module Todotxt
       super
       @config = Config.new
       unless ["help", "generate_config", "generate_txt"].include? ARGV[0]
-        ask_and_create_conf unless @config.file_exists?
+        ask_and_create @config unless @config.file_exists?
         parse_conf
-        ask_and_create_files unless @file.exists?
+        ask_and_create @file unless @file.exists?
       end
     end
 
@@ -272,24 +272,13 @@ module Todotxt
       end
     end
 
-    def ask_and_create_conf
-      say "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
-      confirm_generate = yes? "Create /home/foo/.todotxt.cfg? [y/N]"
+    # File should respond_to "basename", "path" and "generate!"
+    def ask_and_create file
+      puts "#{file.basename} doesn't exist yet. Would you like to generate a sample file?"
+      confirm_generate = yes? "Create #{file.path}? [y/N]"
 
       if confirm_generate
-        @config.generate!
-      else
-        puts ""
-        exit
-      end
-    end
-
-    def ask_and_create_files
-      puts "#{@file} doesn't exist yet. Would you like to generate a sample file?"
-      confirm_generate = yes? "Create #{@file}? [y/N]"
-
-      if confirm_generate
-        @file.generate!
+        file.generate!
       else
         puts ""
         exit
