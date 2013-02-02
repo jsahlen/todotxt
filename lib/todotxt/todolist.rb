@@ -10,7 +10,7 @@ module Todotxt
       @todos = []
       @file  = file
 
-      File.open(file).read.each_line do |l|
+      File.open(file.path).read.each_line do |l|
         add l.strip unless l.empty?
       end
     end
