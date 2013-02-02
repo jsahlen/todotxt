@@ -37,12 +37,7 @@ module Todotxt
     method_option :done,   :type => :boolean, :aliases => "-d", :desc => "Include todo items that have been marked as done"
     method_option :simple, :type => :boolean, :desc => "Simple output (for scripts, etc)"
     def list search=""
-      with_done = false
-
-      with_done = true if options[:done]
-
-      @list.filter(search, :with_done => with_done)
-
+      @list.filter(search, :with_done => (options[:done] ? true : false))
       render_list :simple => !!options[:simple]
     end
     map "ls" => :list
