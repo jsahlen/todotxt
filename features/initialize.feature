@@ -23,7 +23,7 @@ Feature: Initialize
     And I type "no"
     Then it should pass with:
       """
-      You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.
+      .todotxt.cfg doesn't exist yet. Would you like to generate a sample file?
       """
     And a file named ".todotxt.cfg" should exist
 

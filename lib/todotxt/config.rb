@@ -32,6 +32,14 @@ module Todotxt
      import_config
     end
 
+    def path
+      @config_file
+    end
+
+    def basename
+      File.basename @config_file
+    end
+
     private
     def validate
       if params["files"] && params["todo_txt_path"]
