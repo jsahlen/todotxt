@@ -269,7 +269,7 @@ module Todotxt
 
     def ask_and_create_conf
       say "You need a .todotxt.cfg file in your home folder to continue (used to determine the path of your todo.txt.) Answer yes to have it generated for you (pointing to ~/todo.txt), or no to create it yourself.\n\n"
-      confirm_generate = yes? "Create ~/.todotxt.cfg? [y/N]"
+      confirm_generate = yes? "Create /home/foo/.todotxt.cfg? [y/N]"
 
       if confirm_generate
         @config.generate!

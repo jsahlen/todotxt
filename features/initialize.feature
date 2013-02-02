@@ -8,13 +8,13 @@ Feature: Initialize
     When I run `todotxt` interactively
     And I type "yes"
     And I type "yes"
-    Then it should pass with:
+    Then it should pass with regexp:
       """
-      Create ~/.todotxt.cfg? [y/N]
+      Create \/(.*)\/\.todotxt.cfg\? \[y\/N\]
       """
     And it should pass with regexp:
       """
-      Create (.*)\/todo.txt\? \[y\/N\]
+      Create \/(.*)\/todo.txt\? \[y\/N\]
       """
 
   Scenario: New installation asks and creates a config file
