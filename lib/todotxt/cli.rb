@@ -19,11 +19,15 @@ module Todotxt
         parse_conf
         ask_and_create @file unless @file.exists?
       end
+
+      @list = TodoList.new @file
     end
 
     class_option :file, :type => :string, :desc => "Use a different file than todo.txt
      E.g. use 'done' to have the action performed on the file you set for 'done' in the todotxt
      configuration under [files]."
+
+    default_task :list
 
     #
     # Listing
