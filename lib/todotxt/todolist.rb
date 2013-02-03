@@ -45,7 +45,7 @@ module Todotxt
     end
 
     def save
-      File.open(@file, "w") { |f| f.write to_txt }
+      File.open(@file.path, "w") { |f| f.write to_txt }
     end
 
     def each &block
