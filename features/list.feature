@@ -92,14 +92,14 @@ Feature: Listing todos
   Scenario: List all done items
     Given a todofile with the following items exists:
       | todo                           |
-      | Buy GTD book @amazon +wishlist |
+      | x Buy GTD book @amazon +wishlist |
       | Install todotxt @cli +todotxt  |
-      | Read documentation +todotxt    |
+      | x Read documentation +todotxt    |
     When I run `todotxt lsdone`
     Then it should pass with:
       """
-      1. x Run cucumber
-      3. x Run rspec
+      1. x Buy GTD book @amazon +wishlist
+      3. x Read documentation +todotxt
       """
     Then it should count 2 TODO-items
     When I run `todotxt lsd`
