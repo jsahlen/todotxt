@@ -16,3 +16,7 @@ Then /^I should see all entries from the todofile without formatting$/ do
   step "it should pass with regex:", contents
   step "the output should not match /TODO: [\d]+ items/"
 end
+
+Then /^it should count (\d+) TODO\-items$/ do |count|
+  step %{the output should match /^TODO: #{count} items$/}
+end
