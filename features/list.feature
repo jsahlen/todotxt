@@ -58,3 +58,18 @@ Feature: Listing todos
       | foo-bar  |  | 0 |
       | "buy install" | | 0 |
 
+  Scenario: List is sorted by priority
+    Given a todofile with the following items exists:
+      | todo                           |
+      | (B) Install todotxt @cli +todotxt  |
+      | Drink coffee |
+      | (A) Read documentation +todotxt   |
+      | (C) Buy GTD book @amazon +wishlist |
+    When I run `todotxt list`
+    Then it should pass with:
+      """
+      3. (A) Read documentation +todotxt
+      1. (B) Install todotxt @cli +todotxt
+      4. (C) Buy GTD book @amazon +wishlist
+      2. Drink coffee
+      """
