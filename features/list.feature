@@ -40,31 +40,31 @@ Feature: Listing todos
 
   Scenario Outline:
     Given a todofile with the following items exists:
-      | todo                           |
-      | Install todotxt @cli +todotxt  |
-      | Read documentation +todotxt    |
-      | Buy GTD book @amazon +wishlist |
+       | todo                           |
+       | Install todotxt @cli +todotxt  |
+       | Read documentation +todotxt    |
+       | Buy GTD book @amazon +wishlist |
     When I run `todotxt list <filter>`
     Then the output should match /.*<todos>.*/
     Then it should count <amount> TODO-items
 
     Examples:
-      | filter  | todos                         | amount |
-      | @cli    | Install todotxt | 1      |
-      | +todotxt | Install todotxt .* Read documentation | 2 |
-      | book     | Buy GTD book | 1 |
-      | install  | Install todotxt | 1 | 
-      | "Install todotxt" | Install todotxt | 1 |
-      | foo-bar  |  | 0 |
-      | "buy install" | | 0 |
+        | filter            | todos                                 | amount |
+        | @cli              | Install todotxt                       | 1      |
+        | +todotxt          | Install todotxt .* Read documentation | 2      |
+        | book              | Buy GTD book                          | 1      |
+        | install           | Install todotxt                       | 1      |
+        | "Install todotxt" | Install todotxt                       | 1      |
+        | foo-bar           |                                       | 0      |
+        | "buy install"     |                                       | 0      |
 
   Scenario: List is sorted by priority
     Given a todofile with the following items exists:
-      | todo                           |
-      | (B) Install todotxt @cli +todotxt  |
-      | Drink coffee |
-      | (A) Read documentation +todotxt   |
-      | (C) Buy GTD book @amazon +wishlist |
+       | todo                               |
+       | (B) Install todotxt @cli +todotxt  |
+       | Drink coffee                       |
+       | (A) Read documentation +todotxt    |
+       | (C) Buy GTD book @amazon +wishlist |
     When I run `todotxt list`
     Then it should pass with:
       """
@@ -77,9 +77,9 @@ Feature: Listing todos
   @todo
   Scenario: List is sorted by date
     Given a todofile with the following items exists:
-      | todo                           |
+      | todo                                      |
       | 2013-01-01 Install todotxt @cli +todotxt  |
-      | Read documentation +todotxt   |
+      | Read documentation +todotxt               |
       | 2012-12-12 Buy GTD book @amazon +wishlist |
     When I run `todotxt list`
     Then it should pass with:
@@ -91,10 +91,10 @@ Feature: Listing todos
 
   Scenario: List all done items
     Given a todofile with the following items exists:
-      | todo |
-      | x Run cucumber |
-      | Remove all todos from code |
-      | x Run rspec |
+      | todo                           |
+      | Buy GTD book @amazon +wishlist |
+      | Install todotxt @cli +todotxt  |
+      | Read documentation +todotxt    |
     When I run `todotxt lsdone`
     Then it should pass with:
       """
@@ -107,10 +107,10 @@ Feature: Listing todos
 
   Scenario: List all projects
     Given a todofile with the following items exists:
-      | todo |
+      | todo                           |
       | Buy GTD book @amazon +wishlist |
       | Install todotxt @cli +todotxt  |
-      | Read documentation +todotxt   |
+      | Read documentation +todotxt    |
     When I run `todotxt lsproj`
     Then it should pass with:
       """
@@ -120,10 +120,10 @@ Feature: Listing todos
 
   Scenario: List all contexts
     Given a todofile with the following items exists:
-      | todo |
+      | todo                           |
       | Install todotxt @cli +todotxt  |
       | Buy GTD book @amazon +wishlist |
-      | Read documentation +todotxt   |
+      | Read documentation +todotxt    |
     When I run `todotxt lscon`
     Then it should pass with:
       """
