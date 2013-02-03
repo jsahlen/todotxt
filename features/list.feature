@@ -73,3 +73,19 @@ Feature: Listing todos
       4. (C) Buy GTD book @amazon +wishlist
       2. Drink coffee
       """
+
+  @todo
+  Scenario: List is sorted by date
+    Given a todofile with the following items exists:
+      | todo                           |
+      | 2013-01-01 Install todotxt @cli +todotxt  |
+      | Read documentation +todotxt   |
+      | 2012-12-12 Buy GTD book @amazon +wishlist |
+    When I run `todotxt list`
+    Then it should pass with:
+      """
+      3. 2012-12-12 Buy GTD book @amazon +wishlist
+      1. 2013-01-01 Install todotxt @cli +todotxt
+      2. Read documentation +todotxt
+      """
+
