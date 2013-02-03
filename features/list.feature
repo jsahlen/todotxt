@@ -46,7 +46,7 @@ Feature: Listing todos
       | Buy GTD book @amazon +wishlist |
     When I run `todotxt list <filter>`
     Then the output should match /.*<todos>.*/
-    And the output should match /^TODO: <amount> items$/
+    Then it should count <amount> TODO-items
 
     Examples:
       | filter  | todos                         | amount |
@@ -89,3 +89,44 @@ Feature: Listing todos
       2. Read documentation +todotxt
       """
 
+  Scenario: List all done items
+    Given a todofile with the following items exists:
+      | todo |
+      | x Run cucumber |
+      | Remove all todos from code |
+      | x Run rspec |
+    When I run `todotxt lsdone`
+    Then it should pass with:
+      """
+      1. x Run cucumber
+      3. x Run rspec
+      """
+    Then it should count 2 TODO-items
+    When I run `todotxt lsd`
+    Then it should count 2 TODO-items
+
+  Scenario: List all projects
+    Given a todofile with the following items exists:
+      | todo |
+      | Buy GTD book @amazon +wishlist |
+      | Install todotxt @cli +todotxt  |
+      | Read documentation +todotxt   |
+    When I run `todotxt lsproj`
+    Then it should pass with:
+      """
+      +todotxt
+      +wishlist
+      """
+
+  Scenario: List all contexts
+    Given a todofile with the following items exists:
+      | todo |
+      | Install todotxt @cli +todotxt  |
+      | Buy GTD book @amazon +wishlist |
+      | Read documentation +todotxt   |
+    When I run `todotxt lscon`
+    Then it should pass with:
+      """
+      @amazon
+      @cli
+      """
