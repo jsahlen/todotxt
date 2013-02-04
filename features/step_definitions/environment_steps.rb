@@ -2,6 +2,10 @@ Given /^a default config exists$/ do
   write_file(".todotxt.cfg", "[files]\ntodo = todo.txt")
 end
 
+Given /^an old config exists$/ do
+  write_file(".todotxt.cfg", "todo_txt_path = todo.txt")
+end
+
 Given /^an empty environment$/ do
   step %{a file named ".todotxt.cfg" should not exist}
   step %{a file named "todo.txt" should not exist}
