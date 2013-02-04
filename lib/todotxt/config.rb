@@ -5,7 +5,7 @@ module Todotxt
   class Config < ParseConfig
     def initialize config_file = ""
       if config_file.empty?
-        @config_file = File.join ENV["HOME"], ".todotxt.cfg"
+        @config_file = Config.config_path
       else
         @config_file = config_file
       end
@@ -38,6 +38,10 @@ module Todotxt
 
     def basename
       File.basename @config_file
+    end
+
+    def self.config_path
+      File.join ENV["HOME"], ".todotxt.cfg"
     end
 
     private

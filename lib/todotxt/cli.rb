@@ -14,13 +14,14 @@ module Todotxt
     def initialize(*args)
       super
       @config = Config.new
+      @list   = nil
       unless ["help", "generate_config", "generate_txt"].include? ARGV[0]
         ask_and_create @config unless @config.file_exists?
         parse_conf
         ask_and_create @file unless @file.exists?
+        @list = TodoList.new @file
       end
 
-      @list = TodoList.new @file
     end
 
     class_option :file, :type => :string, :desc => "Use a different file than todo.txt
@@ -237,7 +238,7 @@ module Todotxt
 
     desc "generate_config", "Create a .todotxt.cfg file in your home folder, containing the path to todo.txt"
     def generate_config
-      copy_file "todotxt.cfg", CFG_PATH
+      copy_file "todotxt.cfg", Config.config_path
       puts ""
     end
 
