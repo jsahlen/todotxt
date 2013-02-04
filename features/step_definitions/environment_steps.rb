@@ -4,6 +4,7 @@ end
 
 Given /^an empty environment$/ do
   step %{a file named ".todotxt.cfg" should not exist}
+  step %{a file named "todo.txt" should not exist}
 end
 
 Given /^a config exists with the following files:$/ do |files|
