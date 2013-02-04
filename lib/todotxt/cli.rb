@@ -13,6 +13,10 @@ module Todotxt
 
     def initialize(*args)
       super
+      # Allow testing colors, rainbow usually detects whether
+      #  the output goes to a TTY, but Aruba/Cucumber is not a 
+      #  TTY, so we enforce it here, based on an environment var
+      Sickill::Rainbow.enabled = true if ENV["FORCE_COLORS"] == "TRUE"
       @config = Config.new
       @list   = nil
       unless ["help", "generate_config", "generate_txt"].include? ARGV[0]
