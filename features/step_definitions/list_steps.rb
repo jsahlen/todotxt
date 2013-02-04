@@ -20,3 +20,10 @@ end
 Then /^it should count (\d+) TODO\-items$/ do |count|
   step %{the output should match /^TODO: #{count} items$/}
 end
+
+Then /^it should output "([^"]*)" brightly in "([^"]*)"$/ do |string, color|
+  assert_partial_output(string.color(color.to_sym).bright, all_output)
+end
+Then /^it should output "([^"]*)" in "([^"]*)"$/ do |string, color|
+  assert_partial_output(string.color(color.to_sym), all_output)
+end
