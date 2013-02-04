@@ -60,3 +60,14 @@ Feature: Initialize
     When I run `todotxt` interactively
     And I type "no"
     Then a file named "todo.txt" should not exist
+
+  Scenario: Running with an old config-file still works
+    Given an old config exists
+    And a todofile with the following items exists:
+       | todo                  | 
+       | Update my config file | 
+    When I run `todotxt`
+    Then it should pass with:
+      """
+      1. Update my config file
+      """

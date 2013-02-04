@@ -295,20 +295,20 @@ module Todotxt
     def parse_conf
       @files = {}
 
-      return if (@config.nil? || @config["files"].nil?)
-
-      # Fill the @files from settings.
-      @config["files"].each do |name, file_path|
-        unless file_path.empty?
-          @files[name.to_sym] = TodoFile.new(file_path)
-        end
-      end
+      return if @config.nil?
 
       # Backwards compatibility with todo_txt_path
       #   when old variable is still set, and no files=>todo 
       #   given, fallback to this old version.
       if @config["todo_txt_path"]
-        @files[:todo] ||= @config["todo_txt_path"]
+        @files[:todo] ||= TodoFile.new(@config["todo_txt_path"])
+      else
+        # Fill the @files from settings.
+        @config["files"].each do |name, file_path|
+          unless file_path.empty?
+            @files[name.to_sym] = TodoFile.new(file_path)
+          end
+        end
       end
 
       # Determine what file should be activated, set that in @file
