@@ -15,7 +15,7 @@ Feature: move
       | Label Maker @officesupply          |
     And an empty todofile named "wishlist.txt" exists
 
-  Scenario: Move item from todo.txt to wishlist.txt, aliased as "wishlist"
+  Scenario: Move item from todo.txt to wishlist.txt
     When I run `todotxt move 1 wishlist`
     Then it should pass with:
       """
@@ -24,8 +24,6 @@ Feature: move
       """
     And the file "todo.txt" should not contain "Getting Things Done @bookstore"
     And the file "wishlist.txt" should contain "Getting Things Done @bookstore"
-
-  Scenario: Move item from 
 
   Scenario: Move an illegal item
     When I run `todotxt move 1337 wishlist`
