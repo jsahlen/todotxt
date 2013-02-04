@@ -1,6 +1,7 @@
 require "todotxt/todo"
 
 module Todotxt
+  #@TODO merge with TodoFile, both overlap too much
   class TodoList
     include Enumerable
 
