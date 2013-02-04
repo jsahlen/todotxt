@@ -218,9 +218,12 @@ module Todotxt
       lines.unshift(line1).each do |line|
         todo = @list.find_by_line line
         if todo
-          @list.move other_list, line
-          notice format_todo(todo) +"\n" \
-                 "moved to #{otherlist}"
+          say format_todo(todo)
+          @list.move line, other_list
+          notice "Moved to #{other_list}"
+
+          other_list.save
+          @list.save
         else
           error "No todo found at line #{line}"
         end

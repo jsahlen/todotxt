@@ -28,7 +28,7 @@ module Todotxt
     end
 
     def move line, other_list
-      other_list.add line
+      other_list.add find_by_line(line).to_s
       remove line
     end
 
@@ -78,6 +78,10 @@ module Todotxt
 
     def to_txt
       @todos.sort { |a,b| a.line <=> b.line }.map { |t| t.to_s.strip }.join("\n")
+    end
+
+    def to_s
+      @file.basename
     end
 
     def to_a
