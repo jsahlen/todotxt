@@ -2,6 +2,10 @@ Given /^a default config exists$/ do
   write_file(".todotxt.cfg", "[files]\ntodo = todo.txt")
 end
 
+Given /^an empty environment$/ do
+  step %{a file named ".todotxt.cfg" should not exist}
+end
+
 Given /^a config exists with the following files:$/ do |files|
   files_directive = "[files]\n"
   files_directive += files.hashes.map {|file| "#{file["alias"]}=#{file["path"]}" }.join("\n")
