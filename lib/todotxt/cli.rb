@@ -206,10 +206,10 @@ module Todotxt
       end
     end
     map "rm" => :del
-    
+
     desc "edit", "Open todo.txt file in your default editor"
     def edit
-      system "#{@editor} #{@txt_path}"
+      system "#{@editor} #{@file.path}"
     end
 
     desc "move | mv ITEM#[, ITEM#, ITEM#, ...] file", "Move ITEM# to another file"
@@ -344,6 +344,9 @@ module Todotxt
       else
         @file = @files[:todo]
       end
+
+      # Determine the editor
+      @editor = @config["editor"] || ENV["EDITOR"]
     end
 
     def validate

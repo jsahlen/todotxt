@@ -17,6 +17,10 @@ Given /^a config exists with the following files:$/ do |files|
   write_file(".todotxt.cfg", files_directive)
 end
 
+Given /^a default config exists with the editor set to "(.*?)"$/ do |editor|
+  write_file(".todotxt.cfg", "editor=#{editor}\n[files]\ntodo = todo.txt")
+end
+
 Given /^a todofile exists$/ do
   write_file("todo.txt", "Read documentation for todotxt\nWrite cucumber steps for todotxt")
 end
@@ -34,3 +38,6 @@ Given /^an empty todofile named "(.*?)" exists$/ do |filename|
   write_file(filename, "")
 end
 
+Given /^the enviromnent variable "(.*?)" is set to "(.*?)"$/ do |name, value|
+  ENV[name] = value
+end
