@@ -1,6 +1,7 @@
 require "todotxt/todo"
 
 module Todotxt
+  #@TODO merge with TodoFile, both overlap too much
   class TodoList
     include Enumerable
 
@@ -10,7 +11,7 @@ module Todotxt
       @todos = []
       @file  = file
 
-      File.open(file).read.each_line do |l|
+      File.open(file.path).read.each_line do |l|
         add l.strip unless l.empty?
       end
     end
@@ -27,6 +28,11 @@ module Todotxt
       @todos.reject! { |t| t.line.to_s == line.to_s }
     end
 
+    def move line, other_list
+      other_list.add find_by_line(line).to_s
+      remove line
+    end
+
     def projects
       map { |t| t.projects }.flatten.uniq.sort
     end
@@ -40,7 +46,7 @@ module Todotxt
     end
 
     def save
-      File.open(@file, "w") { |f| f.write to_txt }
+      File.open(@file.path, "w") { |f| f.write to_txt }
     end
 
     def each &block
@@ -73,6 +79,10 @@ module Todotxt
 
     def to_txt
       @todos.sort { |a,b| a.line <=> b.line }.map { |t| t.to_s.strip }.join("\n")
+    end
+
+    def to_s
+      @file.basename
     end
 
     def to_a

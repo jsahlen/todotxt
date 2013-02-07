@@ -1,0 +1,3 @@
+default: --tags ~@wip --tags ~@todo --require features
+wip: --tags @wip:3 --wip --require features
+todo: --tags @todo:3 --wip --require features
