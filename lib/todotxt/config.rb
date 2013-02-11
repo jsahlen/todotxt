@@ -44,6 +44,10 @@ module Todotxt
       File.join ENV["HOME"], ".todotxt.cfg"
     end
 
+    def deprecated?
+      params["files"].nil?
+    end
+
     private
     def validate
       if params["files"] && params["todo_txt_path"]

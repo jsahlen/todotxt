@@ -21,6 +21,10 @@ module Todotxt
       @list   = nil
       unless ["help", "generate_config", "generate_txt"].include? ARGV[0]
         ask_and_create @config unless @config.file_exists?
+        if @config.deprecated? and options[:file]
+          error_and_exit "You are using an old config, which has no support for mulitple files. Please update your configuration."
+        end
+
         parse_conf
         ask_and_create @file unless @file.exists?
         @list = TodoList.new @file
@@ -347,24 +351,6 @@ module Todotxt
 
       # Determine the editor
       @editor = @config["editor"] || ENV["EDITOR"]
-    end
-
-    def validate
-      # Deprecation warning for old cfg file
-      # @TODO: remove after a few releases.
-      unless @cfg["todo_txt_path"].nil?
-        warn "DEPRECATION: you are using deprecated todo_txt_path setting in ~/.todotxt.cfg\n" \
-             "Please change this to use\n" \
-             "  [files]\n" \
-             "  todo  = ~/path/to/todo.txt\n"
-      end
-
-      # Determine if todo, the only required todo file is configured
-      unless @files.has_key? :todo
-        error_and_exit  "Couldn't find 'todo' path setting in ~/.todotxt.cfg.\n" \
-                        "  Please run the following to create a new configuration file:\n" \
-                        "  todotxt generate_config" \
-      end
     end
   end
 end
