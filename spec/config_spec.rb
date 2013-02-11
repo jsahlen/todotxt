@@ -7,14 +7,32 @@ describe Todotxt::Config do
     @config_file = File.join ENV["HOME"], ".todotxt.cfg"
   end
 
-  it 'should have a "files"' do
-    cfg = Todotxt::Config.new "spec/fixtures/config_new.cfg"
-    cfg.files.keys.should include "todo"
+  context "valid config" do
+    before(:each) do
+      @cfg = Todotxt::Config.new "spec/fixtures/config_new.cfg"
+    end
+
+    it 'should have a "files"' do
+      @cfg.files.keys.should include "todo"
+    end
+
+    it 'should not be deprecated' do
+      @cfg.should_not be_deprecated
+    end
   end
 
-  it 'should place "todo_txt_path" under files' do
-    cfg = Todotxt::Config.new "spec/fixtures/config_old.cfg"
-    cfg.files.keys.should include "todo"
+  context "old style config" do
+    before(:each) do
+      @cfg = Todotxt::Config.new "spec/fixtures/config_old.cfg"
+    end
+
+    it 'should place "todo_txt_path" under files' do
+      @cfg.files.keys.should include "todo"
+    end
+
+    it 'should be deprecated' do
+      @cfg.should be_deprecated
+    end
   end
 
   it 'not allow both "files" and "todo_txt_path"' do
