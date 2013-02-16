@@ -20,7 +20,9 @@ module Todotxt
       #  the output goes to a TTY, but Aruba/Cucumber is not a 
       #  TTY, so we enforce it here, based on an environment var
       Sickill::Rainbow.enabled = true if ENV["FORCE_COLORS"] == "TRUE"
-      @config = Config.new
+
+      # Open config file and render config.
+      @config = Config.new options
       @list   = nil
       unless ["help", "generate_config", "generate_txt"].include? ARGV[0]
         ask_and_create @config unless @config.file_exists?
