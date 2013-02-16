@@ -9,7 +9,7 @@ describe Todotxt::Config do
 
   context "valid config" do
     before(:each) do
-      @cfg = Todotxt::Config.new "spec/fixtures/config_new.cfg"
+      @cfg = Todotxt::Config.new({:config_file => "spec/fixtures/config_new.cfg"})
     end
 
     it 'should have a "files"' do
@@ -23,7 +23,7 @@ describe Todotxt::Config do
 
   context "old style config" do
     before(:each) do
-      @cfg = Todotxt::Config.new "spec/fixtures/config_old.cfg"
+      @cfg = Todotxt::Config.new({:config_file => "spec/fixtures/config_old.cfg"})
     end
 
     it 'should place "todo_txt_path" under files' do

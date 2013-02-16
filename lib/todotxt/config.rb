@@ -3,12 +3,12 @@ require "fileutils"
 
 module Todotxt
   class Config < ParseConfig
-    def initialize config_file = ""
-      if config_file.empty?
-        @config_file = Config.config_path
-      else
-        @config_file = config_file
-      end
+    def initialize options = {}
+      #@INK options must become a passed in parameter containing Thor options hash.
+      # For now, used for --file in @options[:file]
+      @options = {}
+
+      @config_file = options[:config_file] || Config.config_path
 
       if file_exists?
         super @config_file
