@@ -19,6 +19,32 @@ describe Todotxt::Config do
     it 'should not be deprecated' do
       @cfg.should_not be_deprecated
     end
+
+    describe "#files" do
+      it "should return a list of TodoFile objects as configured in config" do
+        @cfg.files.should be_kind_of(Hash)
+        @cfg.files.should eq({ "todo" => Todotxt::TodoFile.new("/tmp/todo.txt") })
+      end
+    end
+    describe "#file" do
+      it "should return the 'todo' file from the 'files' hash" do
+        @cfg.file.should eq @cfg.files["todo"]
+      end
+    end
+  end
+
+  context "invalid config" do
+    it 'not allow both "files" and "todo_txt_path"' do
+      expect do
+        Todotxt::Config.new({ :config_file => "spec/fixtures/config_both.cfg" })
+      end.to raise_error "Bad configuration file: use either files or todo_txt_path"
+    end
+
+    it 'should complain when there is no "todo" in files and no file is requested' do
+      expect do
+        Todotxt::Config.new({:config_file => "spec/fixtures/config_no_todo.cfg"}).file
+      end.to raise_error "Bad configuration file: 'todo' is a required file."
+    end
   end
 
   context "old style config" do
@@ -33,12 +59,6 @@ describe Todotxt::Config do
     it 'should be deprecated' do
       @cfg.should be_deprecated
     end
-  end
-
-  it 'not allow both "files" and "todo_txt_path"' do
-    expect do
-      Todotxt::Config.new "spec/fixtures/config_both.cfg"
-    end.to raise_error "Bad configuration file: use either files or todo_txt_path"
   end
 
   context "#generate!" do

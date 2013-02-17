@@ -28,4 +28,11 @@ describe Todotxt::TodoFile do
       Todotxt::TodoFile.from_key(:does_not_exist)
     }.to raise_error "Key not found in config"
   end
+
+  describe "#==" do
+    it "should compare using paths" do
+      (Todotxt::TodoFile.new(@todo_path)==Todotxt::TodoFile.new(@todo_path)).should be_true
+      (Todotxt::TodoFile.new(@todo_path)==Todotxt::TodoFile.new("/other/path")).should_not be_true
+    end
+  end
 end
