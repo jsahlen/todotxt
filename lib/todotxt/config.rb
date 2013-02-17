@@ -4,9 +4,7 @@ require "fileutils"
 module Todotxt
   class Config < ParseConfig
     def initialize options = {}
-      #@INK options must become a passed in parameter containing Thor options hash.
-      # For now, used for --file in @options[:file]
-      @options = {}
+      @options = options
 
       @config_file = options[:config_file] || Config.config_path
 
@@ -24,7 +22,20 @@ module Todotxt
     end
 
     def files
-      params["files"] || {"todo" => params["todo_txt_path"] }
+      files = {}
+      (params["files"] || {"todo" => params["todo_txt_path"] }).each do |k,p|
+        files[k] = TodoFile.new(p)
+      end
+
+      files
+    end
+
+    def file
+      if @options[:file].nil?
+        files["todo"] || raise("Bad configuration file: 'todo' is a required file.")
+      else
+        files[@options[:file]] || raise("\"#{@options[:file]}\" is not defined in the config.")
+      end
     end
 
     def generate!

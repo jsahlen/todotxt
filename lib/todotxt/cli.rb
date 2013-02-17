@@ -35,8 +35,6 @@ module Todotxt
         @list = TodoList.new @file
       end
 
-        @list = TodoList.new @txt_path
-      end
     end
 
     class_option :file, :type => :string, :desc => "Use a different file than todo.txt

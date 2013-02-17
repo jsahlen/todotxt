@@ -9,6 +9,7 @@ Feature: Files
       | alias    | path         |
       | todo     | todo.txt     | 
       | wishlist | wishlist.txt | 
+    And a todofile exists
     And a todofile named "wishlist.txt" with the following items exists:
       | todo                               |
       | Getting Things Done @bookstore     |
@@ -21,10 +22,9 @@ Feature: Files
       Getting Things Done @bookstore
       """
 
-  @wip
   Scenario: Provide a file that is not in the config
-    When I run `todotxt list --file=doesnotexist`
+    When I run `todotxt list --file=doesnotexist` interactively
     Then it should fail with:
       """
-      \"doesnotexist\" is not a defined in the config
+      \"doesnotexist\" is not defined in the config
       """

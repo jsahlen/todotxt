@@ -32,9 +32,12 @@ module Todotxt
       end
     end
 
-
     def to_s
       @path
+    end
+
+    def ==(other)
+      @path == other.path
     end
   end
 end
