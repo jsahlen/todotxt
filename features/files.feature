@@ -9,7 +9,10 @@ Feature: Files
       | alias    | path         |
       | todo     | todo.txt     | 
       | wishlist | wishlist.txt | 
-    And a todofile exists
+    And a todofile with the following items exists:
+      | todo                     | 
+      | Read book on GTD         | 
+      | Publish wishlist on site | 
     And a todofile named "wishlist.txt" with the following items exists:
       | todo                               |
       | Getting Things Done @bookstore     |
@@ -27,4 +30,14 @@ Feature: Files
     Then it should fail with:
       """
       \"doesnotexist\" is not defined in the config
+      """
+
+  Scenario: List entries from all files
+    When I run `todotxt list --all`
+    Then it should pass with:
+      """
+      1. Read book on GTD
+      2. Publish wishlist on site
+      3. Getting Things Done @bookstore
+      4. Label Maker @officesupply
       """
