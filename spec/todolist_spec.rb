@@ -99,4 +99,11 @@ EOF
     end
   end
 
+  describe "with line-number provided" do
+    it "starts counting at the number" do
+      @file = Todotxt::TodoFile.new File.join(File.dirname(__FILE__), "fixtures", "simple_todo.txt")
+      @list = Todotxt::TodoList.new @file, 42
+      @list.todos[0].line.should eql 43
+    end
+  end
 end

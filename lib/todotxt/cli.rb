@@ -48,7 +48,15 @@ module Todotxt
     desc "list | ls [SEARCH]", "List all todos, or todos matching SEARCH"
     method_option :done,   :type => :boolean, :aliases => "-d", :desc => "Include todo items that have been marked as done"
     method_option :simple, :type => :boolean, :desc => "Simple output (for scripts, etc)"
+    method_option :all,    :type => :boolean, :aliases => "-a", :desc => "List items from all files"
     def list search=""
+      if options[:all]
+        @config.files.each do |file|
+          count = @list.todos.count || 0
+          @list.todos += TodoList.new(file[1], count).todos unless file[0] == "todo"
+        end
+      end
+
       @list.filter(search, :with_done => (options[:done] ? true : false))
       render_list :simple => !!options[:simple]
     end
