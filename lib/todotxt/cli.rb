@@ -71,6 +71,18 @@ module Todotxt
     end
     map "lsc" => :lscon
 
+    desc "due", "List due items"
+    def due
+      if ENV["date"] # Allow testing to "freeze" the date
+        today = DateTime.parse(ENV["date"]).strftime("%Y-%m-%d")
+      else
+        today = DateTime.now.strftime("%Y-%m-%d")
+      end
+
+      puts "Due today (#{today})"
+      @list.filter(today).each { |todo| puts format_todo(todo) }
+    end
+
     #
     # Todo management
     #
