@@ -27,3 +27,8 @@ end
 Then /^it should output "([^"]*)" in "([^"]*)"$/ do |string, color|
   assert_partial_output(string.color(color.to_sym), all_output)
 end
+
+Then /^it should pass with todays date$/ do
+  today = DateTime.now.strftime("%Y-%m-%d")
+  step "it should pass with regex:", ".*#{today}.*"
+end

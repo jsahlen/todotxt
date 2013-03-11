@@ -7,6 +7,11 @@ Feature: Due
   Background:
     Given a default config exists
 
+  Scenario: Show todays date
+    Given a todofile exists
+    When I run `todotxt due` interactively
+    Then it should pass with todays date
+
   Scenario: List todays due
     Given the date is "2012-12-12"
     Given a todofile with the following items exists:
