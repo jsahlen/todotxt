@@ -1,5 +1,6 @@
 require "thor"
 require "rainbow"
+require "chronic"
 require "parseconfig"
 
 module Todotxt
@@ -74,13 +75,19 @@ module Todotxt
     desc "due", "List due items"
     def due
       if ENV["date"] # Allow testing to "freeze" the date
-        today = DateTime.parse(ENV["date"]).strftime("%Y-%m-%d")
+        today = DateTime.parse(ENV["date"]).to_date
       else
-        today = DateTime.now.strftime("%Y-%m-%d")
+        today = DateTime.now.to_date
       end
 
-      puts "Due today (#{today})"
-      @list.filter(today).each { |todo| puts format_todo(todo) }
+      puts "Due today (#{today.strftime("%Y-%m-%d")})"
+      @list.on_date(today).each { |todo| puts format_todo(todo) }
+      puts "\nPast-due items"
+      @list.before_date(today).each { |todo| puts format_todo(todo) }
+      puts "\nDue 7 days in advance"
+      ((today+1)..(today+7)).each do |day|
+        @list.on_date(day).each { |todo| puts format_todo(todo) }
+      end
     end
 
     #
