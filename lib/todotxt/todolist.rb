@@ -77,6 +77,10 @@ module Todotxt
       self
     end
 
+    def on_date date
+      @todos.select { |t| t.due == date }
+    end
+
     def to_txt
       @todos.sort { |a,b| a.line <=> b.line }.map { |t| t.to_s.strip }.join("\n")
     end
