@@ -28,6 +28,17 @@ describe Todotxt::Todo do
     todo.done.should eql true
   end
 
+  it "parses a due date" do
+    todo = Todotxt::Todo.new "(A) x 2012-12-12 an item +project1 +project2 @context1 @context2"
+    todo.due.should eql Chronic.parse("12 December 2012").to_date
+
+    todo = Todotxt::Todo.new "2012-1-2 an item +project1 +project2 @context1 @context2"
+    todo.due.should eql Chronic.parse("2 January 2012").to_date
+
+    todo = Todotxt::Todo.new "42 folders"
+    todo.due.should be_nil
+  end
+
   it "stores line number when creating an item" do
     todo = Todotxt::Todo.new "an item", "2"
 
