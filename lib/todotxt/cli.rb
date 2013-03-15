@@ -1,5 +1,6 @@
 require "thor"
 require "rainbow"
+require "chronic"
 require "parseconfig"
 
 module Todotxt
@@ -70,6 +71,24 @@ module Todotxt
       @list.contexts.each { |c| say c }
     end
     map "lsc" => :lscon
+
+    desc "due", "List due items"
+    def due
+      if ENV["date"] # Allow testing to "freeze" the date
+        today = DateTime.parse(ENV["date"]).to_date
+      else
+        today = DateTime.now.to_date
+      end
+
+      puts "Due today (#{today.strftime("%Y-%m-%d")})".bright
+      @list.on_date(today).each { |todo| puts format_todo(todo) }
+      puts "\nPast-due items".bright
+      @list.before_date(today).each { |todo| puts format_todo(todo) }
+      puts "\nDue 7 days in advance".bright
+      ((today+1)..(today+7)).each do |day|
+        @list.on_date(day).each { |todo| puts format_todo(todo) }
+      end
+    end
 
     #
     # Todo management

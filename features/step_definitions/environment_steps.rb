@@ -41,3 +41,7 @@ end
 Given /^the enviromnent variable "(.*?)" is set to "(.*?)"$/ do |name, value|
   ENV[name] = value
 end
+
+Given /^the date is "(.*?)"$/ do |date|
+  step %{the enviromnent variable "date" is set to "#{date}"}
+end

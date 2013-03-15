@@ -1,5 +1,6 @@
 require "spec_helper"
 require "todotxt/todolist"
+require "todotxt/todofile"
 
 describe Todotxt::TodoList do
 
@@ -50,6 +51,20 @@ describe Todotxt::TodoList do
       @list.filter "first"
 
       @list.todos.count.should eql 1
+    end
+
+    it "fetches items for a certain date" do
+      @list.add "2012-12-12 item"
+      date = DateTime.parse("2012-12-12")
+      @list.on_date(date).count.should eql 1
+      @list.on_date(date).should eql [@list.todos.last]
+    end
+
+    it "fetchs items before a cereain date" do
+      @list.add "2012-11-11 item"
+      @list.add "2012-12-12 item"
+      date = DateTime.parse("2012-12-12")
+      @list.before_date(date).count.should eql 1
     end
 
     it "includes done items in search when told to do so" do
