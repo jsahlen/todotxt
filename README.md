@@ -38,24 +38,26 @@ The gem will install a command, `todotxt` which is used to interact with your
 todo.txt.
 
     Tasks:
-      todotxt add | a TEXT                           # Add a new Todo item
-      todotxt append | app ITEM# STRING              # Append STRING to ITEM#
-      todotxt del | rm ITEM#[, ITEM#, ITEM#, ...]    # Remove ITEM#
-      todotxt do ITEM#[, ITEM#, ITEM#, ...]          # Mark ITEM# as done
-      todotxt dp | depri ITEM#[, ITEM#, ITEM#, ...]  # Remove priority for ITEM#
-      todotxt edit                                   # Open todo.txt file in your default editor
-      todotxt generate_txt                           # Create a sample todo.txt
-      todotxt generate_config                        # Create a .todotxt.cfg file in your home folder, containing the path to todo.txt
-      todotxt help [TASK]                            # Describe available tasks or one specific task
-      todotxt list | ls [SEARCH]                     # List all todos, or todos matching SEARCH
-      todotxt listproj | lsproj                      # List all projects
-      todotxt lscon | lsc                            # List all contexts
-      todotxt lsdone | lsd                           # List all done items
-      todotxt prepend | prep ITEM# STRING            # Prepend STRING to ITEM#
-      todotxt pri | p ITEM# PRIORITY                 # Set priority of ITEM# to PRIORITY
-      todotxt replace ITEM# TEXT                     # Completely replace ITEM# text with TEXT
-      todotxt undo | u ITEM#[, ITEM#, ITEM#, ...]    # Mark ITEM# item as not done
-      todotxt version                                # Show todotxt version    
+      todotxt add | a TEXT                               # Add a new Todo item
+      todotxt append | app ITEM# STRING                  # Append STRING to ITEM#
+      todotxt del | rm ITEM#[, ITEM#, ITEM#, ...]        # Remove ITEM#
+      todotxt do ITEM#[, ITEM#, ITEM#, ...]              # Mark ITEM# as done
+      todotxt dp | depri ITEM#[, ITEM#, ITEM#, ...]      # Remove priority for ITEM#
+      todotxt due                                        # List due items
+      todotxt edit                                       # Open todo.txt file in your default editor
+      todotxt generate_config                            # Create a .todotxt.cfg file in your home folder, containing the path to todo.txt
+      todotxt generate_txt                               # Create a sample todo.txt
+      todotxt help [TASK]                                # Describe available tasks or one specific task
+      todotxt list | ls [SEARCH]                         # List all todos, or todos matching SEARCH
+      todotxt listproj | lsproj                          # List all projects
+      todotxt lscon | lsc                                # List all contexts
+      todotxt lsdone | lsd                               # List all done items
+      todotxt move | mv ITEM#[, ITEM#, ITEM#, ...] file  # Move ITEM# to another file
+      todotxt prepend | prep ITEM# STRING                # Prepend STRING to ITEM#
+      todotxt pri | p ITEM# PRIORITY                     # Set priority of ITEM# to PRIORITY
+      todotxt replace ITEM# TEXT                         # Completely replace ITEM# text with TEXT
+      todotxt undo | u ITEM#[, ITEM#, ITEM#, ...]        # Mark ITEM# item as not done
+      todotxt version                                    # Show todotxt version   
 
 Calling simply `todotxt` will automatically run the `ls` command.
 
