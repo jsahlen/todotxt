@@ -33,8 +33,12 @@ module Todotxt
     def file
       if @options[:file].nil?
         files["todo"] || raise("Bad configuration file: 'todo' is a required file.")
+      elsif files[@options[:file]]
+        files[@options[:file]]
+      elsif File.exists?(File.expand_path(@options[:file]))
+        TodoFile.new(File.expand_path(@options[:file]))
       else
-        files[@options[:file]] || raise("\"#{@options[:file]}\" is not defined in the config.")
+        raise("\"#{@options[:file]}\" is not defined in the config and not a valid filename.")
       end
     end
 

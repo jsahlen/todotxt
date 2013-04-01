@@ -32,6 +32,16 @@ Feature: Files
       \"doesnotexist\" is not defined in the config
       """
 
+  Scenario: Run list with --files option and a filename for a file not in the config
+    Given a todofile named "deferred.txt" with the following items exists:
+      | todo                               |
+      | Getting Things Done @bookstore     |
+    When I run `todotxt list --file=./deferred.txt`
+    Then it should pass with:
+      """
+      Getting Things Done @bookstore
+      """
+
   Scenario: List entries from all files
     When I run `todotxt list --all`
     Then it should pass with:
