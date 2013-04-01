@@ -24,6 +24,11 @@ module Todotxt
       @done = !text.scan(DONE_REGEX).empty?
     end
 
+    def due
+      date = Chronic.parse(text.scan(DATE_REGEX).flatten[2])
+      date.nil? ? nil : date.to_date
+    end
+
     def do
       unless done
         @text = "x #{text}".strip
