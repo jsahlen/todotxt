@@ -13,7 +13,7 @@ Feature: Edit
       | 2012-12-12 Buy GTD book @amazon +wishlist |
 
   Scenario: Open the file in the systems editor
-    Given the enviromnent variable "EDITOR" is set to "echo"
+    Given the environment variable "EDITOR" is set to "echo"
     And a default config exists
     When I run `todotxt edit`
     Then it should pass with:

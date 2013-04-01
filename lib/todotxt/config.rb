@@ -38,6 +38,10 @@ module Todotxt
       end
     end
 
+    def editor
+      params["editor"] || ENV["EDITOR"]
+    end
+
     def generate!
      FileUtils.copy File.join(File.dirname(File.expand_path(__FILE__)), "..", "..", "conf", "todotxt.cfg"), @config_file
      import_config

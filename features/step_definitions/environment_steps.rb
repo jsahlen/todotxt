@@ -42,10 +42,10 @@ Given /^an empty todofile named "(.*?)" exists$/ do |filename|
   write_file(filename, "")
 end
 
-Given /^the enviromnent variable "(.*?)" is set to "(.*?)"$/ do |name, value|
+Given /^the environment variable "(.*?)" is set to "(.*?)"$/ do |name, value|
   ENV[name] = value
 end
 
 Given /^the date is "(.*?)"$/ do |date|
-  step %{the enviromnent variable "date" is set to "#{date}"}
+  step %{the environment variable "date" is set to "#{date}"}
 end
