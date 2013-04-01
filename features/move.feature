@@ -25,6 +25,19 @@ Feature: move
     And the file "todo.txt" should not contain "Getting Things Done @bookstore"
     And the file "wishlist.txt" should contain "Getting Things Done @bookstore"
 
+  Scenario: Move an item from wishlist.txt to todo.txt
+    Given a todofile named "wishlist.txt" with the following items exists:
+       | todo                   |
+       | x Archive todotxt @gtd |
+    When I run `todotxt move 1 todo --file=wishlist`
+    Then it should pass with:
+      """
+      1. x Archive todotxt @gtd
+      => Moved to todo.txt
+      """
+    And the file "wishlist.txt" should not contain "x Archive todotxt @gtd"
+    And the file "todo.txt" should contain "x Archive todotxt @gtd"
+
   Scenario: Move an illegal item
     When I run `todotxt move 1337 wishlist`
     Then it should pass with:
