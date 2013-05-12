@@ -57,10 +57,30 @@ todo.txt.
       todotxt pri | p ITEM# PRIORITY                     # Set priority of ITEM# to PRIORITY
       todotxt replace ITEM# TEXT                         # Completely replace ITEM# text with TEXT
       todotxt undo | u ITEM#[, ITEM#, ITEM#, ...]        # Mark ITEM# item as not done
-      todotxt version                                    # Show todotxt version   
+      todotxt version                                    # Show todotxt version
 
 Calling simply `todotxt` will automatically run the `ls` command.
 
+You can pass the option `--file=` to point todotxt to another file. You
+can pass an alias, defined in the configuration, or the path to an
+arbitrary file.
+
+With a file wishlist, in the configuration defined as "wishlist", you
+can run:
+
+    todotxt ls --file=wishlist
+
+To list all items form this wishlist file. Alternatively you can run:
+
+    todotxt ls --file="~/Dropbox/todo/deferred.txt"
+
+To list all items from the file deferred.txt, provided that file
+exists.
+
+In order to list all items from all files defined in the config, use the
+`--all` flag with ls:
+
+    todotxt ls --all
 
 ## Screenshot
 

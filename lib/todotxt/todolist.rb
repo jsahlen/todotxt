@@ -7,7 +7,12 @@ module Todotxt
 
     attr_accessor :todos
 
-    def initialize file
+    # @INK: refactor TodoList and TodoFile
+    #   So that TodoFile contains all IO ad List is no longer dependent on file.
+    #   That way, todolist lsa|listall can use multiple TodoFiles to generate one TodoList
+
+    def initialize file, line = nil
+      @line  = line || 0
       @todos = []
       @file  = file
 
@@ -17,7 +22,7 @@ module Todotxt
     end
 
     def add str
-      todo = Todo.new str, (@todos.count + 1)
+      todo = Todo.new str, (@line += 1)
       @todos.push todo
       @todos.sort!
 

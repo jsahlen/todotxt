@@ -29,19 +29,23 @@ Given /^a todofile with done items exists$/ do
   write_file("todo.txt", "Read documentation for todotxt\nx Install todotxt\nWrite cucumber steps for todotxt")
 end
 
-Given /^a todofile with the following items exists:$/ do |todolist|
+Given /^a todofile named "(.*?)" with the following items exists:$/ do |filename, todolist|
   contents = todolist.hashes.map {|row| row["todo"] }.join("\n")
-  write_file("todo.txt", contents)
+  write_file(filename, contents)
+end
+
+Given /^a todofile with the following items exists:$/ do |todolist|
+  step %{a todofile named "todo.txt" with the following items exists:}, todolist
 end
 
 Given /^an empty todofile named "(.*?)" exists$/ do |filename|
   write_file(filename, "")
 end
 
-Given /^the enviromnent variable "(.*?)" is set to "(.*?)"$/ do |name, value|
+Given /^the environment variable "(.*?)" is set to "(.*?)"$/ do |name, value|
   ENV[name] = value
 end
 
 Given /^the date is "(.*?)"$/ do |date|
-  step %{the enviromnent variable "date" is set to "#{date}"}
+  step %{the environment variable "date" is set to "#{date}"}
 end

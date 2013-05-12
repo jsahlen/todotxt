@@ -3,12 +3,10 @@ require "fileutils"
 
 module Todotxt
   class Config < ParseConfig
-    def initialize config_file = ""
-      if config_file.empty?
-        @config_file = Config.config_path
-      else
-        @config_file = config_file
-      end
+    def initialize options = {}
+      @options = options
+
+      @config_file = options[:config_file] || Config.config_path
 
       if file_exists?
         super @config_file
@@ -24,7 +22,28 @@ module Todotxt
     end
 
     def files
-      params["files"] || {"todo" => params["todo_txt_path"] }
+      files = {}
+      (params["files"] || {"todo" => params["todo_txt_path"] }).each do |k,p|
+        files[k] = TodoFile.new(p)
+      end
+
+      files
+    end
+
+    def file
+      if @options[:file].nil?
+        files["todo"] || raise("Bad configuration file: 'todo' is a required file.")
+      elsif files[@options[:file]]
+        files[@options[:file]]
+      elsif File.exists?(File.expand_path(@options[:file]))
+        TodoFile.new(File.expand_path(@options[:file]))
+      else
+        raise("\"#{@options[:file]}\" is not defined in the config and not a valid filename.")
+      end
+    end
+
+    def editor
+      params["editor"] || ENV["EDITOR"]
     end
 
     def generate!
