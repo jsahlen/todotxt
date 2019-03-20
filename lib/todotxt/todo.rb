@@ -1,8 +1,7 @@
-require "todotxt/regex"
+require 'todotxt/regex'
 
 module Todotxt
   class Todo
-
     attr_accessor :text
     attr_accessor :line
     attr_accessor :priority
@@ -10,13 +9,13 @@ module Todotxt
     attr_accessor :contexts
     attr_accessor :done
 
-    def initialize text, line=nil
+    def initialize(text, line = nil)
       @line = line
 
       create_from_text text
     end
 
-    def create_from_text text
+    def create_from_text(text)
       @text = text
       @priority = text.scan(PRIORITY_REGEX).flatten.first || nil
       @projects = text.scan(PROJECT_REGEX).flatten.uniq   || []
@@ -38,21 +37,17 @@ module Todotxt
 
     def undo
       if done
-        @text = text.sub(DONE_REGEX, "").strip
+        @text = text.sub(DONE_REGEX, '').strip
         @done = false
       end
     end
 
-    def prioritize new_priority=nil, opts={}
-      if new_priority && !new_priority.match(/^[A-Z]$/i)
-        return
-      end
+    def prioritize(new_priority = nil, opts = {})
+      return if new_priority && !new_priority.match(/^[A-Z]$/i)
 
-      if new_priority
-        new_priority = new_priority.upcase
-      end
+      new_priority = new_priority.upcase if new_priority
 
-      priority_string = new_priority ? "(#{new_priority}) " : ""
+      priority_string = new_priority ? "(#{new_priority}) " : ''
 
       if priority && !opts[:force]
         @text.gsub! PRIORITY_REGEX, priority_string
@@ -63,16 +58,16 @@ module Todotxt
       @priority = new_priority
     end
 
-    def append appended_text=""
-      @text << " " << appended_text
+    def append(appended_text = '')
+      @text << ' ' << appended_text
     end
 
-    def prepend prepended_text=""
+    def prepend(prepended_text = '')
       @text = "#{prepended_text} #{text.gsub(PRIORITY_REGEX, '')}"
-      prioritize priority, :force => true
+      prioritize priority, force: true
     end
 
-    def replace text
+    def replace(text)
       create_from_text text
     end
 
@@ -80,16 +75,13 @@ module Todotxt
       text.clone
     end
 
-    def <=> b
-      if priority.nil? && b.priority.nil?
-        return line <=> b.line
-      end
+    def <=>(b)
+      return line <=> b.line if priority.nil? && b.priority.nil?
 
       return 1 if priority.nil?
       return -1 if b.priority.nil?
 
-      return priority <=> b.priority
+      priority <=> b.priority
     end
-
   end
 end

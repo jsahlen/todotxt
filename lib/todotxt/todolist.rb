@@ -1,7 +1,7 @@
-require "todotxt/todo"
+require 'todotxt/todo'
 
 module Todotxt
-  #@TODO merge with TodoFile, both overlap too much
+  # @TODO merge with TodoFile, both overlap too much
   class TodoList
     include Enumerable
 
@@ -11,7 +11,7 @@ module Todotxt
     #   So that TodoFile contains all IO ad List is no longer dependent on file.
     #   That way, todolist lsa|listall can use multiple TodoFiles to generate one TodoList
 
-    def initialize file, line = nil
+    def initialize(file, line = nil)
       @line  = line || 0
       @todos = []
       @file  = file
@@ -21,44 +21,44 @@ module Todotxt
       end
     end
 
-    def add str
+    def add(str)
       todo = Todo.new str, (@line += 1)
       @todos.push todo
       @todos.sort!
 
-      return todo
+      todo
     end
 
-    def remove line
+    def remove(line)
       @todos.reject! { |t| t.line.to_s == line.to_s }
     end
 
-    def move line, other_list
+    def move(line, other_list)
       other_list.add find_by_line(line).to_s
       remove line
     end
 
     def projects
-      map { |t| t.projects }.flatten.uniq.sort
+      map(&:projects).flatten.uniq.sort
     end
 
     def contexts
-      map { |t| t.contexts }.flatten.uniq.sort
+      map(&:contexts).flatten.uniq.sort
     end
 
-    def find_by_line line
+    def find_by_line(line)
       @todos.find { |t| t.line.to_s == line.to_s }
     end
 
     def save
-      File.open(@file.path, "w") { |f| f.write to_txt }
+      File.open(@file.path, 'w') { |f| f.write to_txt }
     end
 
-    def each &block
+    def each(&block)
       @todos.each &block
     end
 
-    def filter search="", opts={}
+    def filter(search = '', opts = {})
       @todos.select! do |t|
         select = false
 
@@ -82,16 +82,16 @@ module Todotxt
       self
     end
 
-    def on_date date
+    def on_date(date)
       @todos.select { |t| t.due == date }
     end
 
-    def before_date date
+    def before_date(date)
       @todos.reject { |t| t.due.nil? || t.due >= date }
     end
 
     def to_txt
-      @todos.sort { |a,b| a.line <=> b.line }.map { |t| t.to_s.strip }.join("\n")
+      @todos.sort_by(&:line).map { |t| t.to_s.strip }.join("\n")
     end
 
     def to_s
@@ -101,6 +101,5 @@ module Todotxt
     def to_a
       map { |t| ["#{t.line}. ", t.to_s] }
     end
-
   end
 end

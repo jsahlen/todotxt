@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
-libdir = File.join(File.dirname(File.dirname(__FILE__)), "lib")
+libdir = File.join(File.dirname(File.dirname(__FILE__)), 'lib')
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 args = ARGV.clone
 
-#if args.empty?
-  #args.push "ls"
-#end
+# if args.empty?
+# args.push "ls"
+# end
 
-require "todotxt"
+require 'todotxt'
 Todotxt::CLI.start(args)
