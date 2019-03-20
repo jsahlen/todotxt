@@ -2,6 +2,12 @@ require 'parseconfig'
 require 'fileutils'
 
 module Todotxt
+  # Todotxt relies on a configuration file (`.todotxt.cfg`) in your home directory,
+  # which points to the location of your todo.txt. You can run:
+  #
+  #    $ todotxt generate_cfg
+  #
+  # to generate this file, which will then point to `~/todo.txt`.
   class Config < ParseConfig
     def initialize(options = {})
       @options = options

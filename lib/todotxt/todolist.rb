@@ -1,11 +1,12 @@
 require 'todotxt/todo'
 
 module Todotxt
-  # @TODO merge with TodoFile, both overlap too much
+  # Represent a collection of `Todo`
+  # TODO merge with TodoFile, both overlap too much
   class TodoList
     include Enumerable
 
-    attr_accessor :todos
+    attr_reader :todos
 
     # @INK: refactor TodoList and TodoFile
     #   So that TodoFile contains all IO ad List is no longer dependent on file.
@@ -21,6 +22,8 @@ module Todotxt
       end
     end
 
+    # @param [String] str add the given todo string definition to the list
+    # TODO also support `Todo` object
     def add(str)
       todo = Todo.new str, (@line += 1)
       @todos.push todo
@@ -29,6 +32,7 @@ module Todotxt
       todo
     end
 
+    # @param [Todo|String] line remove the given todo to the list
     def remove(line)
       @todos.reject! { |t| t.line.to_s == line.to_s }
     end
@@ -38,10 +42,14 @@ module Todotxt
       remove line
     end
 
+    # Get all existing projects into todos
+    # @return[Array<String>]
     def projects
       map(&:projects).flatten.uniq.sort
     end
 
+    # Get all existing contects into todos
+    # @return[Array<String>]
     def contexts
       map(&:contexts).flatten.uniq.sort
     end

@@ -2,6 +2,8 @@
 libdir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
+
+# Todotxt is a Ruby librairy / CLI interface to work with a [todo.txt](http://www.todotxt.com) format.
 module Todotxt
   autoload :Todo,       'todotxt/todo'
   autoload :TodoList,   'todotxt/todolist'
