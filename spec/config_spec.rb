@@ -57,7 +57,7 @@ describe Todotxt::Config do
     end
 
     it 'should be deprecated' do
-      expect(@cfg).not_to be_deprecated
+      expect(@cfg).to be_deprecated
     end
   end
 
@@ -66,7 +66,7 @@ describe Todotxt::Config do
       File.delete @config_file if File.exist? @config_file
       todo = Todotxt::Config.new
       todo.generate!
-      File.exist?(@config_file).should be_true
+      expect(File.exist?(@config_file)).to be_truthy
     end
   end
 end

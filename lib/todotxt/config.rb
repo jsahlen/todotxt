@@ -12,8 +12,11 @@ module Todotxt
         super @config_file
         validate
       else
+        # Initialize mandatory values for `ParseConfig`
         @params = {}
         @groups = []
+        @splitRegex = '\s*=\s*'
+        @comments = [';']
       end
     end
 
