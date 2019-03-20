@@ -1,141 +1,128 @@
-require "spec_helper"
-require "todotxt/todo"
+require 'spec_helper'
+require 'todotxt/todo'
 
 describe Todotxt::Todo do
-
-  it "creates a todo item string" do
-    todo = Todotxt::Todo.new "an item"
-    todo.to_s.should eql("an item")
+  it 'creates a todo item string' do
+    todo = Todotxt::Todo.new 'an item'
+    expect(todo.to_s).to match('an item')
   end
 
-  it "parses metadata when creating a simple item" do
-    todo = Todotxt::Todo.new "x an item +project1 +project2 @context1 @context2"
-
-    todo.to_s.should eql "x an item +project1 +project2 @context1 @context2"
-    todo.priority.should eql nil
-    todo.projects.should eql ["+project1", "+project2"]
-    todo.contexts.should eql ["@context1", "@context2"]
-    todo.done.should eql true
+  it 'parses metadata when creating a simple item' do
+    todo = Todotxt::Todo.new 'x an item +project1 +project2 @context1 @context2'
+    expect(todo.to_s).to match('x an item +project1 +project2 @context1 @context2')
+    expect(todo.priority).to be_nil
+    expect(todo.projects).to contain_exactly('+project1', '+project2')
+    expect(todo.contexts).to contain_exactly('@context1', '@context2')
+    expect(todo.done).to be_truthy
   end
 
-  it "parses metadata when creating an item with priority" do
-    todo = Todotxt::Todo.new "(A) x an item +project1 +project2 @context1 @context2"
-
-    todo.to_s.should eql "(A) x an item +project1 +project2 @context1 @context2"
-    todo.priority.should eql "A"
-    todo.projects.should eql ["+project1", "+project2"]
-    todo.contexts.should eql ["@context1", "@context2"]
-    todo.done.should eql true
+  it 'parses metadata when creating an item with priority' do
+    todo = Todotxt::Todo.new '(A) x an item +project1 +project2 @context1 @context2'
+    expect(todo.to_s).to match('(A) x an item +project1 +project2 @context1 @context2')
+    expect(todo.priority).to match('A')
+    expect(todo.projects).to contain_exactly('+project1', '+project2')
+    expect(todo.contexts).to contain_exactly('@context1', '@context2')
+    expect(todo.done).to be_truthy
   end
 
-  it "parses a due date" do
-    todo = Todotxt::Todo.new "(A) x 2012-12-12 an item +project1 +project2 @context1 @context2"
-    todo.due.should eql Chronic.parse("12 December 2012").to_date
+  it 'parses a due date' do
+    todo = Todotxt::Todo.new '(A) x 2012-12-12 an item +project1 +project2 @context1 @context2'
+    expect(todo.due).to eql(Chronic.parse('12 December 2012').to_date)
 
-    todo = Todotxt::Todo.new "2012-1-2 an item +project1 +project2 @context1 @context2"
-    todo.due.should eql Chronic.parse("2 January 2012").to_date
+    todo = Todotxt::Todo.new '2012-1-2 an item +project1 +project2 @context1 @context2'
+    expect(todo.due).to eql(Chronic.parse('2 January 2012').to_date)
 
-    todo = Todotxt::Todo.new "42 folders"
-    todo.due.should be_nil
+    todo = Todotxt::Todo.new '42 folders'
+    expect(todo.due).to be_nil
   end
 
-  it "stores line number when creating an item" do
-    todo = Todotxt::Todo.new "an item", "2"
-
-    todo.line.should eql "2"
+  it 'stores line number when creating an item' do
+    todo = Todotxt::Todo.new 'an item', '2'
+    expect(todo.line).to match('2')
   end
 
-  it "sets an item as done" do
-    todo = Todotxt::Todo.new "an item"
-
+  it 'sets an item as done' do
+    todo = Todotxt::Todo.new 'an item'
     todo.do
 
-    todo.to_s.should eql "x an item"
-    todo.done.should eql true
+    expect(todo.to_s).to match 'x an item'
+    expect(todo.done).to be_truthy
   end
 
-  it "sets an item as not done" do
-    todo = Todotxt::Todo.new "x an item"
+  it 'sets an item as not done' do
+    todo = Todotxt::Todo.new 'x an item'
 
     todo.undo
 
-    todo.to_s.should eql "an item"
-    todo.done.should eql false
+    expect(todo.to_s).to match('an item')
+    expect(todo.done).to be_falsy
   end
 
-  it "adds priority to an item" do
-    todo = Todotxt::Todo.new "an item"
+  it 'adds priority to an item' do
+    todo = Todotxt::Todo.new 'an item'
+    todo.prioritize 'a'
 
-    todo.prioritize "a"
-
-    todo.to_s.should eql "(A) an item"
-    todo.priority.should eql "A"
+    expect(todo.to_s).to match('(A) an item')
+    expect(todo.priority).to match('A')
   end
 
-  it "changes priority of an item" do
-    todo = Todotxt::Todo.new "(A) an item"
+  it 'changes priority of an item' do
+    todo = Todotxt::Todo.new '(A) an item'
+    todo.prioritize 'z'
 
-    todo.prioritize "z"
-
-    todo.to_s.should eql "(Z) an item"
-    todo.priority.should eql "Z"
+    expect(todo.to_s).to match('(Z) an item')
+    expect(todo.priority).to match('Z')
   end
 
-  it "removes priority from an item" do
-    todo = Todotxt::Todo.new "(A) an item"
-
+  it 'removes priority from an item' do
+    todo = Todotxt::Todo.new '(A) an item'
     todo.prioritize
 
-    todo.to_s.should eql "an item"
-    todo.priority.should eql nil
+    expect(todo.to_s).to match('an item')
+    expect(todo.priority).to be_nil
   end
 
-  it "appends text to an item" do
-    todo = Todotxt::Todo.new "an item"
+  it 'appends text to an item' do
+    todo = Todotxt::Todo.new 'an item'
+    todo.append 'more text'
 
-    todo.append "more text"
-
-    todo.to_s.should eql "an item more text"
+    expect(todo.to_s).to match('an item more text')
   end
 
-  it "prepends text to an item" do
-    todo = Todotxt::Todo.new "an item"
+  it 'prepends text to an item' do
+    todo = Todotxt::Todo.new 'an item'
+    todo.prepend 'more text'
 
-    todo.prepend "more text"
-
-    todo.to_s.should eql "more text an item"
+    expect(todo.to_s).to match('more text an item')
   end
 
-  it "preserves priority when prepending text to an item" do
-    todo = Todotxt::Todo.new "(A) an item"
+  it 'preserves priority when prepending text to an item' do
+    todo = Todotxt::Todo.new '(A) an item'
+    todo.prepend 'more text'
 
-    todo.prepend "more text"
-
-    todo.to_s.should eql "(A) more text an item"
-    todo.priority.should eql "A"
+    expect(todo.to_s).to match('(A) more text an item')
+    expect(todo.priority).to match('A')
   end
 
-  it "replaces an item with new text" do
-    todo = Todotxt::Todo.new "an item"
+  it 'replaces an item with new text' do
+    todo = Todotxt::Todo.new 'an item'
+    todo.replace '(A) a replacement item'
 
-    todo.replace "(A) a replacement item"
-
-    todo.to_s.should eql "(A) a replacement item"
-    todo.priority.should eql "A"
+    expect(todo.to_s).to match('(A) a replacement item')
+    expect(todo.priority).to match('A')
   end
 
-  it "sorts based on line number" do
-    todo1 = Todotxt::Todo.new "an item 1", 1
-    todo2 = Todotxt::Todo.new "an item 2", 2
+  it 'sorts based on line number' do
+    todo1 = Todotxt::Todo.new 'an item 1', 1
+    todo2 = Todotxt::Todo.new 'an item 2', 2
 
-    (todo1 <=> todo2).should eql -1
+    expect(todo1 <=> todo2).to eql -1
   end
 
-  it "values items with priority higher when sorting" do
-    todo1 = Todotxt::Todo.new "an item 1", 1
-    todo2 = Todotxt::Todo.new "(A) an item 2", 2
+  it 'values items with priority higher when sorting' do
+    todo1 = Todotxt::Todo.new 'an item 1', 1
+    todo2 = Todotxt::Todo.new '(A) an item 2', 2
 
-    (todo1 <=> todo2).should eql 1
+    expect(todo1 <=> todo2).to eql 1
   end
-
 end

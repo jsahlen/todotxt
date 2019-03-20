@@ -1,124 +1,116 @@
-require "spec_helper"
-require "todotxt/todolist"
-require "todotxt/todofile"
+require 'spec_helper'
+require 'todotxt/todolist'
+require 'todotxt/todofile'
 
 describe Todotxt::TodoList do
-
-  describe "with simple list" do
+  describe 'with simple list' do
     before :each do
-      @file = Todotxt::TodoFile.new File.join(File.dirname(__FILE__), "fixtures", "simple_todo.txt")
+      @file = Todotxt::TodoFile.new File.join(File.dirname(__FILE__), 'fixtures', 'simple_todo.txt')
       @list = Todotxt::TodoList.new @file
     end
 
-    it "parses a file on creation" do
-      @list.todos[0].to_s.should eql "First item"
-      @list.todos[1].to_s.should eql "Second item"
-      @list.todos[2].to_s.should eql "Third item"
-      @list.todos[3].to_s.should eql "x First done item"
+    it 'parses a file on creation' do
+      expect(@list.todos[0].to_s).to match('First item')
+      expect(@list.todos[1].to_s).to match('Second item')
+      expect(@list.todos[2].to_s).to match('Third item')
+      expect(@list.todos[3].to_s).to match('x First done item')
 
-      @list.todos[0].line.should eql 1
-      @list.todos[1].line.should eql 2
-      @list.todos[2].line.should eql 3
-      @list.todos[3].line.should eql 4
+      expect(@list.todos[0].line).to eql 1
+      expect(@list.todos[1].line).to eql 2
+      expect(@list.todos[2].line).to eql 3
+      expect(@list.todos[3].line).to eql 4
     end
 
-    it "adds a new item" do
-      @list.add "Fourth item"
-
-      @list.todos[4].to_s.should eql "Fourth item"
-      @list.todos[4].line.should eql 5
+    it 'adds a new item' do
+      @list.add 'Fourth item'
+      expect(@list.todos[4].to_s).to match('Fourth item')
+      expect(@list.todos[4].line).to eql 5
     end
 
-    it "removes an item" do
+    it 'removes an item' do
       @list.remove 1
-
-      @list.todos[0].to_s.should eql "Second item"
+      expect(@list.todos[0].to_s).to match('Second item')
     end
 
-    it "finds item by line" do
+    it 'finds item by line' do
       todo = @list.find_by_line 3
-
-      todo.to_s.should eql "Third item"
+      expect(todo.to_s).to match('Third item')
     end
 
-    it "filters list when searching" do
-      @list.filter "First"
-
-      @list.todos.count.should eql 1
+    it 'filters list when searching' do
+      @list.filter 'First'
+      expect(@list.todos.count).to eql 1
     end
 
-    it "filters list when searching case-sensitive" do
-      @list.filter "first"
-
-      @list.todos.count.should eql 1
+    it 'filters list when searching case-sensitive' do
+      @list.filter 'first'
+      expect(@list.todos.count).to eql 1
     end
 
-    it "fetches items for a certain date" do
-      @list.add "2012-12-12 item"
-      date = DateTime.parse("2012-12-12")
-      @list.on_date(date).count.should eql 1
-      @list.on_date(date).should eql [@list.todos.last]
+    it 'fetches items for a certain date' do
+      @list.add '2012-12-12 item'
+      date = DateTime.parse('2012-12-12')
+      expect(@list.on_date(date).count).to eql 1
+      expect(@list.on_date(date)).to match([@list.todos.last])
     end
 
-    it "fetchs items before a cereain date" do
-      @list.add "2012-11-11 item"
-      @list.add "2012-12-12 item"
-      date = DateTime.parse("2012-12-12")
-      @list.before_date(date).count.should eql 1
+    it 'fetchs items before a cereain date' do
+      @list.add '2012-11-11 item'
+      @list.add '2012-12-12 item'
+      date = DateTime.parse('2012-12-12')
+      expect(@list.before_date(date).count).to eql 1
     end
 
-    it "includes done items in search when told to do so" do
-      @list.filter "first", :with_done => true
-
-      @list.todos.count.should eql 2
+    it 'includes done items in search when told to do so' do
+      @list.filter 'first', with_done: true
+      expect(@list.todos.count).to eql 2
     end
 
-    it "only includes done items in search when told to do so" do
-      @list.filter "first", :only_done => true
-
-      @list.todos.count.should eql 1
+    it 'only includes done items in search when told to do so' do
+      @list.filter 'first', only_done: true
+      expect(@list.todos.count).to eql 1
     end
 
-    it "renders plain text" do
+    it 'renders plain text' do
       comparison_string = <<EOF
 First item
 Second item
 Third item
 x First done item
 EOF
-      @list.to_txt.should eql comparison_string.strip
+      expect(@list.to_txt).to match(comparison_string.strip)
     end
   end
 
-  describe "with complex list" do
+  describe 'with complex list' do
     before :each do
-      @file = Todotxt::TodoFile.new File.join(File.dirname(__FILE__), "fixtures", "complex_todo.txt")
+      @file = Todotxt::TodoFile.new File.join(File.dirname(__FILE__), 'fixtures', 'complex_todo.txt')
       @list = Todotxt::TodoList.new @file
     end
 
-    it "sorts itself automatically on parse" do
-      @list.todos[0].to_s.should eql "(A) an item"
-      @list.todos[0].line.should eql 3
+    it 'sorts itself automatically on parse' do
+      expect(@list.todos[0].to_s).to match('(A) an item')
+      expect(@list.todos[0].line).to eql(3)
     end
 
-    it "re-sorts itself after adding a new item" do
-      @list.add "(B) A new item"
+    it 're-sorts itself after adding a new item' do
+      @list.add '(B) A new item'
 
-      @list.todos[1].to_s.should eql "(B) A new item"
-      @list.todos[1].line.should eql 4
+      expect(@list.todos[1].to_s).to match('(B) A new item')
+      expect(@list.todos[1].line).to eql(4)
     end
 
-    it "lists all projects and contexts in the list" do
-      @list.projects.should eql ["+project1", "+project2"]
-      @list.contexts.should eql ["@context1", "@context2"]
+    it 'lists all projects and contexts in the list' do
+      expect(@list.projects).to contain_exactly('+project1', '+project2')
+      expect(@list.contexts).to contain_exactly('@context1', '@context2')
     end
   end
 
-  describe "with line-number provided" do
-    it "starts counting at the number" do
-      @file = Todotxt::TodoFile.new File.join(File.dirname(__FILE__), "fixtures", "simple_todo.txt")
+  describe 'with line-number provided' do
+    it 'starts counting at the number' do
+      @file = Todotxt::TodoFile.new File.join(File.dirname(__FILE__), 'fixtures', 'simple_todo.txt')
       @list = Todotxt::TodoList.new @file, 42
-      @list.todos[0].line.should eql 43
+      expect(@list.todos[0].line).to eql 43
     end
   end
 end
