@@ -27,7 +27,7 @@ module Todotxt
       unless %w[help generate_config generate_txt].include? ARGV[0]
         ask_and_create @config unless @config.file_exists?
         if @config.deprecated? && options[:file]
-          error_and_exit 'You are using an old config, which has no support for mulitple files. Please update your configuration.'
+          error_and_exit 'You are using an old config, which has no support for multiple files. Please update your configuration.'
         end
 
         ask_and_create @config.file unless @config.file.exists?

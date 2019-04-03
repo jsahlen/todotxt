@@ -1,12 +1,12 @@
 require 'todotxt/regex'
 
 module Todotxt
-  # Represent a task formated according
+  # Represent a task formatted according to
   # [todo.txt format rules](https://github.com/todotxt/todo.txt#todotxt-format-rules)
   #
-  # @attr [String] text reprensent all text definition of this task
+  # @attr [String] the complete text definition of this task
   # @attr [Integer] line the line number of this task
-  # @attr [Char] priority the letter who define pritority
+  # @attr [Char] the character which defines the task's priority
   # @attr [Array] projects list of linked projects
   # @attr [Array] contexts list of linked contexts
   # @attr [Boolean] done `true` if task is done
@@ -40,7 +40,7 @@ module Todotxt
       end
     end
 
-    # Mark this task as undone
+    # Mark this task as not done
     def undo
       if done
         @text = text.sub(DONE_REGEX, '').strip
@@ -64,12 +64,12 @@ module Todotxt
       @priority = new_priority
     end
 
-    # Add some content to the task
+    # Add some text to the end of this task definition
     def append(appended_text = '')
       @text << ' ' << appended_text
     end
 
-    # Add some content to the task
+    # Add some text to the beginning of this task definition
     def prepend(prepended_text = '')
       @text = "#{prepended_text} #{text.gsub(PRIORITY_REGEX, '')}"
       prioritize priority, force: true
@@ -84,7 +84,7 @@ module Todotxt
       text.clone
     end
 
-    # Compare another `Todo` according to their `line` and `priority` attribute.
+    # Compare with another `Todo` based on `line` and `priority` attributes
     # @param [Todo] b
     def <=>(b)
       return 1 unless b.is_a? Todo

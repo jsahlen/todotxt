@@ -1,7 +1,7 @@
 require 'todotxt/todo'
 
 module Todotxt
-  # Represent a collection of `Todo`
+  # Represent a collection of `Todo` items
   # TODO merge with TodoFile, both overlap too much
   class TodoList
     include Enumerable
@@ -42,13 +42,13 @@ module Todotxt
       remove line
     end
 
-    # Get all existing projects into todos
+    # Get all projects from todo definitions
     # @return[Array<String>]
     def projects
       map(&:projects).flatten.uniq.sort
     end
 
-    # Get all existing contects into todos
+    # Get all contexts from todo definitions
     # @return[Array<String>]
     def contexts
       map(&:contexts).flatten.uniq.sort
